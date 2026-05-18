@@ -1210,21 +1210,12 @@ const ServiceArea = () => {
 
 const ContactForm = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', service: '', details: '' });
-  const [files, setFiles] = useState<File[]>([]);
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
-
-  const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files) return;
-    const selected = Array.from(e.target.files).slice(0, 5);
-    setFiles(prev => [...prev, ...selected].slice(0, 5));
-  };
-
-  const removeFile = (i: number) => setFiles(prev => prev.filter((_, idx) => idx !== i));
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1239,7 +1230,6 @@ const ContactForm = () => {
       fd.append('Phone', form.phone);
       fd.append('Service', form.service);
       fd.append('Details', form.details);
-      files.forEach((file, i) => fd.append(`Photo_${i + 1}`, file, file.name));
 
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
@@ -1250,7 +1240,6 @@ const ContactForm = () => {
       if (data.success) {
         setStatus('success');
         setForm({ name: '', email: '', phone: '', service: '', details: '' });
-        setFiles([]);
       } else {
         setErrorMsg(data.message ?? 'Unknown error');
         console.error('Web3Forms error:', data);
@@ -1354,45 +1343,10 @@ const ContactForm = () => {
                 <label className="contact-label">Details & Location</label>
               </div>
 
-              {/* Row 5: Photo upload */}
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-3">
-                  Attach Photos <span className="font-normal normal-case tracking-normal">(optional · up to 5 images)</span>
-                </p>
-                <label className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-gray-200 rounded-xl p-6 cursor-pointer hover:border-brand-orange hover:bg-brand-orange/[0.02] transition-all group">
-                  <input type="file" accept="image/*" multiple className="hidden" onChange={handleFiles} />
-                  <div className="w-10 h-10 rounded-full bg-brand-soft flex items-center justify-center group-hover:bg-brand-orange/10 transition-colors">
-                    <svg className="w-5 h-5 text-brand-navy/40 group-hover:text-brand-orange transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                    </svg>
-                  </div>
-                  <span className="text-sm font-bold text-gray-400 group-hover:text-brand-navy transition-colors">
-                    {files.length === 0 ? 'Click to upload garage photos' : `${files.length} photo${files.length > 1 ? 's' : ''} selected — click to add more`}
-                  </span>
-                </label>
-
-                {files.length > 0 && (
-                  <div className="flex flex-wrap gap-3 mt-4">
-                    {files.map((file, i) => (
-                      <div key={i} className="relative group/thumb">
-                        <img
-                          src={URL.createObjectURL(file)}
-                          alt={file.name}
-                          className="w-20 h-20 object-cover rounded-xl border-2 border-gray-100"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => removeFile(i)}
-                          className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-brand-navy text-white text-[10px] flex items-center justify-center opacity-0 group-hover/thumb:opacity-100 transition-opacity hover:bg-red-500"
-                        >
-                          ×
-                        </button>
-                        <p className="text-[9px] text-gray-400 mt-1 w-20 truncate text-center">{file.name}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+              {/* Photos note */}
+              <p className="text-sm text-gray-400 font-medium text-center">
+                📷 Have garage photos? Text them to us after submitting — we'll reference them in your quote.
+              </p>
 
               {status === 'error' && (
                 <p className="text-red-500 text-sm font-bold text-center -mt-4">
@@ -1521,20 +1475,6 @@ const Gallery = () => {
                 {proj.num}
               </span>
 
-              <div className="relative z-10 mb-3 flex items-center justify-between gap-3 sm:hidden">
-                <div>
-                  <p className="text-[9px] text-brand-orange font-black uppercase tracking-[0.28em] flex items-center gap-1.5">
-                    <MapPin size={10} /> {proj.loc}
-                  </p>
-                  <h3 className="mt-1 font-display text-2xl font-black uppercase tracking-tight text-white leading-none">
-                    {proj.title}
-                  </h3>
-                </div>
-                <span className="shrink-0 rounded-full bg-white/10 px-2.5 py-1.5 text-[8px] font-black uppercase tracking-widest text-white/60">
-                  {proj.num}
-                </span>
-              </div>
-
               {/* Before + After panels */}
               <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-[3px] bg-transparent sm:bg-gray-200 rounded-xl sm:rounded-2xl overflow-visible sm:overflow-hidden sm:shadow-[0_8px_40px_rgba(4,27,77,0.10)]">
                 {/* BEFORE */}
@@ -1593,13 +1533,15 @@ const Gallery = () => {
                 </span>
               </div>
 
-              <div className="relative z-10 mt-3 flex items-center justify-between gap-3 sm:hidden">
-                <span className="min-w-0 rounded-full bg-white px-3 py-2 text-[9px] font-black uppercase tracking-widest text-brand-navy truncate">
-                  {proj.service}
-                </span>
-                <a href="#contact" className="shrink-0 inline-flex items-center gap-1.5 rounded-full bg-brand-green px-3 py-2 text-[9px] font-black uppercase tracking-widest text-brand-navy">
-                  Book Similar <ArrowRight size={11} />
-                </a>
+              {/* Mobile plain-text metadata */}
+              <div className="sm:hidden mt-3">
+                <p className="text-[9px] text-brand-orange font-black uppercase tracking-widest flex items-center gap-1">
+                  <MapPin size={9} /> {proj.loc}
+                </p>
+                <h3 className="mt-0.5 font-display text-xl font-black uppercase tracking-tight text-white leading-none">
+                  {proj.title}
+                </h3>
+                <p className="mt-1 text-[10px] text-white/45 uppercase tracking-wide">{proj.service}</p>
               </div>
             </motion.div>
           ))}
