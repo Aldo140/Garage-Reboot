@@ -23,6 +23,9 @@ import serviceAreaMapImg from '@/images/sections/service-area-map.webp';
 import servicesCardImg from '@/images/sections/services-card.webp';
 import reviewsImg from '@/images/illustrations/reviews.png';
 import qnaImg from '@/images/illustrations/qna.png';
+import illProcessQuote from '@/images/illustrations/process-quote.png';
+import illProcessReboot from '@/images/illustrations/process-reboot.png';
+import illProcessComplete from '@/images/illustrations/process-complete.png';
 import teamIndoorImg from '@/images/team/indoor-cleanout.webp';
 import teamGarageImg from '@/images/team/garage-haul.webp';
 import teamTruckImg from '@/images/team/truck-load.webp';
@@ -1685,9 +1688,9 @@ const Process = () => {
   const card2Y = useTransform(scrollYProgress, [0, 1], ['0%',  '6%']);
 
   const steps = [
-    { step: '01', title: 'Instant Quote', desc: 'Send us a photo or book a free on-site estimate. No pressure, just transparent pricing.', ill: illThumbsUp },
-    { step: '02', title: 'Rapid Reboot',  desc: 'Our team arrives and clears the clutter. We sweep and do the heavy lifting for you.', ill: illCleaning },
-    { step: '03', title: 'Park Your Car', desc: 'Enjoy your reclaimed space. We handle disposal, recycling, and donations.', ill: illResidence },
+    { step: '01', title: 'Instant Quote', desc: 'Send us a photo or book a free on-site estimate. No pressure, just transparent pricing.', ill: illProcessQuote },
+    { step: '02', title: 'Rapid Reboot',  desc: 'Our team arrives and clears the clutter. We sweep and do the heavy lifting for you.', ill: illProcessReboot },
+    { step: '03', title: 'Park Your Car', desc: 'Enjoy your reclaimed space. We handle disposal, recycling, and donations.', ill: illProcessComplete },
   ];
   const cardY = [card0Y, card1Y, card2Y];
 
