@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'motion/react';
 import wideLandingImg from '@/images/wide-landing.png';
 import illCleaning from '@/images/small-illustration-cleaning.png';
@@ -1159,37 +1159,106 @@ const ServiceArea = () => {
 };
 
 const ContactForm = () => {
+  const [form, setForm] = useState({ name: '', phone: '', service: '', details: '' });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('sending');
+    try {
+      const res = await fetch('https://formsubmit.co/ajax/jorti104@mtroyal.ca', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          Name: form.name,
+          Phone: form.phone,
+          Service: form.service,
+          Details: form.details,
+          _subject: `Garage Reboot Quote — ${form.service}`,
+          _captcha: 'false',
+        }),
+      });
+      const data = await res.json();
+      if (data.success === 'true' || data.success === true) {
+        setStatus('success');
+        setForm({ name: '', phone: '', service: '', details: '' });
+      } else {
+        setStatus('error');
+      }
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  if (status === 'success') {
+    return (
+      <section id="contact" className="py-24 bg-white">
+        <div className="max-w-5xl mx-auto px-4 md:px-6">
+          <div className="bg-gray-50 rounded-sm p-10 md:p-20 border border-gray-100 relative overflow-hidden text-center">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-brand-green/5 rounded-full -mr-32 -mt-32 blur-3xl" />
+            <motion.div
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+              className="relative z-10"
+            >
+              <div className="w-20 h-20 rounded-full bg-brand-green/10 border-2 border-brand-green/30 flex items-center justify-center mx-auto mb-8">
+                <Check size={36} className="text-brand-green" strokeWidth={3} />
+              </div>
+              <h2 className="font-display text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none text-brand-navy mb-4">
+                Quote <span className="text-brand-orange">Sent!</span>
+              </h2>
+              <p className="text-gray-400 font-bold uppercase tracking-widest text-sm mb-10">
+                We'll be in touch within 30 minutes.
+              </p>
+              <button
+                onClick={() => setStatus('idle')}
+                className="bg-brand-navy text-white px-10 py-4 rounded-xl font-black text-sm uppercase tracking-widest hover:bg-brand-orange transition-all"
+              >
+                Send Another Request
+              </button>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section id="contact" className="py-24 bg-white">
       <div className="max-w-5xl mx-auto px-4 md:px-6">
         <div className="bg-gray-50 rounded-sm p-10 md:p-20 border border-gray-100 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-64 h-64 bg-brand-orange/5 rounded-full -mr-32 -mt-32 blur-3xl" />
-          
+
           <div className="relative z-10">
             <div className="text-center mb-16">
               <div className="text-brand-orange font-black uppercase text-xs tracking-[0.4em] mb-4">Start Reboot</div>
-            <h2 className="font-display text-5xl md:text-8xl font-black mb-4 uppercase tracking-tighter leading-none text-brand-navy">
-              Get A <span className="text-brand-orange">Quote</span>
-            </h2>
+              <h2 className="font-display text-5xl md:text-8xl font-black mb-4 uppercase tracking-tighter leading-none text-brand-navy">
+                Get A <span className="text-brand-orange">Quote</span>
+              </h2>
               <p className="text-gray-400 font-bold uppercase tracking-widest text-sm italic">Response time: ~30 Minutes</p>
             </div>
 
-            <form className="space-y-12 max-w-3xl mx-auto">
+            <form onSubmit={handleSubmit} className="space-y-12 max-w-3xl mx-auto">
               <div className="grid md:grid-cols-2 gap-12">
                 <div className="contact-input-group">
-                  <input required type="text" className="contact-input" placeholder=" " />
-                  <span className="contact-bar"></span>
+                  <input required type="text" name="name" value={form.name} onChange={handleChange} className="contact-input" placeholder=" " />
+                  <span className="contact-bar" />
                   <label className="contact-label">Full Name</label>
                 </div>
                 <div className="contact-input-group">
-                  <input required type="tel" className="contact-input" placeholder=" " />
-                  <span className="contact-bar"></span>
+                  <input required type="tel" name="phone" value={form.phone} onChange={handleChange} className="contact-input" placeholder=" " />
+                  <span className="contact-bar" />
                   <label className="contact-label">Phone Number</label>
                 </div>
               </div>
-              
+
               <div className="contact-input-group">
-                <select required defaultValue="" className="contact-input appearance-none cursor-pointer uppercase tracking-widest">
+                <select required name="service" value={form.service} onChange={handleChange} className="contact-input appearance-none cursor-pointer uppercase tracking-widest">
                   <option value="" disabled hidden> </option>
                   <option>Full Garage Reboot</option>
                   <option>Junk Removal (Commercial/Res)</option>
@@ -1197,18 +1266,28 @@ const ContactForm = () => {
                   <option>Full Moving Service</option>
                   <option>Estate/Move-Out Service</option>
                 </select>
-                <span className="contact-bar"></span>
+                <span className="contact-bar" />
                 <label className="contact-label">Service Required</label>
               </div>
 
               <div className="contact-input-group">
-                <textarea required rows={4} className="contact-input" placeholder=" "></textarea>
-                <span className="contact-bar"></span>
+                <textarea required rows={4} name="details" value={form.details} onChange={handleChange} className="contact-input" placeholder=" " />
+                <span className="contact-bar" />
                 <label className="contact-label">Details & Location</label>
               </div>
 
-              <button type="submit" className="w-full bg-brand-navy text-white py-6 rounded-xl font-black text-2xl uppercase tracking-widest hover:bg-brand-orange transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)] hover:translate-x-1 hover:translate-y-1 active:scale-95">
-                Reboot My Garage
+              {status === 'error' && (
+                <p className="text-red-500 text-sm font-bold text-center -mt-4">
+                  Something went wrong — please try again or call us directly.
+                </p>
+              )}
+
+              <button
+                type="submit"
+                disabled={status === 'sending'}
+                className="w-full bg-brand-navy text-white py-6 rounded-xl font-black text-2xl uppercase tracking-widest hover:bg-brand-orange transition-all shadow-[8px_8px_0px_0px_rgba(0,0,0,0.1)] hover:translate-x-1 hover:translate-y-1 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:translate-x-0 disabled:translate-y-0 disabled:shadow-none"
+              >
+                {status === 'sending' ? 'Sending…' : 'Reboot My Garage'}
               </button>
             </form>
           </div>
