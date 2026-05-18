@@ -1159,34 +1159,47 @@ const ServiceArea = () => {
 };
 
 const ContactForm = () => {
-  const [form, setForm] = useState({ name: '', phone: '', service: '', details: '' });
+  const [form, setForm] = useState({ name: '', email: '', phone: '', service: '', details: '' });
+  const [files, setFiles] = useState<File[]>([]);
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleFiles = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const selected = Array.from(e.target.files).slice(0, 5);
+    setFiles(prev => [...prev, ...selected].slice(0, 5));
+  };
+
+  const removeFile = (i: number) => setFiles(prev => prev.filter((_, idx) => idx !== i));
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus('sending');
     try {
+      const fd = new FormData();
+      fd.append('access_key', import.meta.env.VITE_WEB3FORMS_KEY);
+      fd.append('subject', `Garage Reboot Quote — ${form.service}`);
+      fd.append('from_name', 'Garage Reboot Website');
+      fd.append('Name', form.name);
+      fd.append('Email', form.email);
+      fd.append('Phone', form.phone);
+      fd.append('Service', form.service);
+      fd.append('Details', form.details);
+      files.forEach((file, i) => fd.append(`Photo_${i + 1}`, file, file.name));
+
       const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-        body: JSON.stringify({
-          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
-          subject: `Garage Reboot Quote — ${form.service}`,
-          from_name: 'Garage Reboot Website',
-          Name: form.name,
-          Phone: form.phone,
-          Service: form.service,
-          Details: form.details,
-        }),
+        headers: { 'Accept': 'application/json' },
+        body: fd,
       });
       const data = await res.json();
       if (data.success) {
         setStatus('success');
-        setForm({ name: '', phone: '', service: '', details: '' });
+        setForm({ name: '', email: '', phone: '', service: '', details: '' });
+        setFiles([]);
       } else {
         setStatus('error');
       }
@@ -1245,6 +1258,7 @@ const ContactForm = () => {
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-12 max-w-3xl mx-auto">
+              {/* Row 1: Name + Phone */}
               <div className="grid md:grid-cols-2 gap-12">
                 <div className="contact-input-group">
                   <input required type="text" name="name" value={form.name} onChange={handleChange} className="contact-input" placeholder=" " />
@@ -1258,6 +1272,14 @@ const ContactForm = () => {
                 </div>
               </div>
 
+              {/* Row 2: Email */}
+              <div className="contact-input-group">
+                <input required type="email" name="email" value={form.email} onChange={handleChange} className="contact-input" placeholder=" " />
+                <span className="contact-bar" />
+                <label className="contact-label">Email Address</label>
+              </div>
+
+              {/* Row 3: Service */}
               <div className="contact-input-group">
                 <select required name="service" value={form.service} onChange={handleChange} className="contact-input appearance-none cursor-pointer uppercase tracking-widest">
                   <option value="" disabled hidden> </option>
@@ -1271,10 +1293,51 @@ const ContactForm = () => {
                 <label className="contact-label">Service Required</label>
               </div>
 
+              {/* Row 4: Details */}
               <div className="contact-input-group">
                 <textarea required rows={4} name="details" value={form.details} onChange={handleChange} className="contact-input" placeholder=" " />
                 <span className="contact-bar" />
                 <label className="contact-label">Details & Location</label>
+              </div>
+
+              {/* Row 5: Photo upload */}
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-gray-400 mb-3">
+                  Attach Photos <span className="font-normal normal-case tracking-normal">(optional · up to 5 images)</span>
+                </p>
+                <label className="flex flex-col items-center justify-center gap-3 border-2 border-dashed border-gray-200 rounded-xl p-6 cursor-pointer hover:border-brand-orange hover:bg-brand-orange/[0.02] transition-all group">
+                  <input type="file" accept="image/*" multiple className="hidden" onChange={handleFiles} />
+                  <div className="w-10 h-10 rounded-full bg-brand-soft flex items-center justify-center group-hover:bg-brand-orange/10 transition-colors">
+                    <svg className="w-5 h-5 text-brand-navy/40 group-hover:text-brand-orange transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-bold text-gray-400 group-hover:text-brand-navy transition-colors">
+                    {files.length === 0 ? 'Click to upload garage photos' : `${files.length} photo${files.length > 1 ? 's' : ''} selected — click to add more`}
+                  </span>
+                </label>
+
+                {files.length > 0 && (
+                  <div className="flex flex-wrap gap-3 mt-4">
+                    {files.map((file, i) => (
+                      <div key={i} className="relative group/thumb">
+                        <img
+                          src={URL.createObjectURL(file)}
+                          alt={file.name}
+                          className="w-20 h-20 object-cover rounded-xl border-2 border-gray-100"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => removeFile(i)}
+                          className="absolute -top-2 -right-2 w-5 h-5 rounded-full bg-brand-navy text-white text-[10px] flex items-center justify-center opacity-0 group-hover/thumb:opacity-100 transition-opacity hover:bg-red-500"
+                        >
+                          ×
+                        </button>
+                        <p className="text-[9px] text-gray-400 mt-1 w-20 truncate text-center">{file.name}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
 
               {status === 'error' && (
