@@ -175,7 +175,7 @@ const Hero = () => {
     <section ref={heroRef} className="relative bg-brand-navy overflow-hidden">
 
       {/* ── MOBILE: auto-slideshow ── */}
-      <div className="lg:hidden mt-20">
+      <div className="md:hidden mt-20">
         <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
           <AnimatePresence>
             <motion.img
@@ -212,7 +212,7 @@ const Hero = () => {
       </div>
 
       {/* ── DESKTOP: right image panel — before → after crossfade on scroll ── */}
-      <div className="hidden lg:block absolute inset-y-0 right-0 w-[52%] overflow-hidden">
+      <div className="hidden md:block absolute inset-y-0 right-0 w-[52%] overflow-hidden">
         {/* Before */}
         <motion.img
           src={heroBeforeImg}
@@ -250,7 +250,7 @@ const Hero = () => {
 
       {/* ── DESKTOP: navy diagonal panel ── */}
       <div
-        className="hidden lg:block absolute inset-y-0 left-0 bg-brand-navy z-10 pointer-events-none"
+        className="hidden md:block absolute inset-y-0 left-0 bg-brand-navy z-10 pointer-events-none"
         style={{ width: '60%', clipPath: 'polygon(0 0, 100% 0, calc(100% - 100px) 100%, 0 100%)' }}
       >
         <div
@@ -272,8 +272,8 @@ const Hero = () => {
         style={{ opacity: contentOpacity, y: contentY }}
         className="relative z-20 w-full max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-16 xl:px-20"
       >
-        <div className="lg:min-h-screen flex flex-col justify-center pt-4 pb-7 sm:pb-14 lg:pt-32 lg:pb-20">
-          <div className="relative lg:max-w-[620px] xl:max-w-[680px]">
+        <div className="md:min-h-screen flex flex-col justify-center pt-4 pb-7 sm:pb-14 md:pt-28 md:pb-20 lg:pt-32 lg:pb-20">
+          <div className="relative md:max-w-[480px] lg:max-w-[620px] xl:max-w-[680px]">
 
             {/* Badges */}
             <motion.div
@@ -286,7 +286,7 @@ const Hero = () => {
                 <span className="text-red-400 text-sm">🍁</span>
                 <span>100% Calgarian Owned</span>
               </div>
-              <div className="rotator-card hidden lg:inline-flex">
+              <div className="rotator-card hidden md:inline-flex">
                 <div className="rotator-loader">
                   <span>Target:</span>
                   <div className="rotator-words">
@@ -308,9 +308,9 @@ const Hero = () => {
                 transition={{ duration: 0.55, delay: 0.1 }}
                 className="font-display font-black tracking-tighter uppercase leading-[0.84] mb-3 sm:mb-8"
               >
-                <span className="block text-white/25 text-[17px] sm:text-[38px] lg:text-[50px] xl:text-[58px]">Your</span>
-                <span className="block text-brand-orange text-[55px] sm:text-[100px] lg:text-[126px] xl:text-[148px]">Garage.</span>
-                <span className="block text-white text-[38px] sm:text-[64px] lg:text-[84px] xl:text-[100px]">
+                <span className="block text-white/25 text-[17px] sm:text-[38px] md:text-[42px] lg:text-[50px] xl:text-[58px]">Your</span>
+                <span className="block text-brand-orange text-[55px] sm:text-[100px] md:text-[90px] lg:text-[126px] xl:text-[148px]">Garage.</span>
+                <span className="block text-white text-[38px] sm:text-[64px] md:text-[58px] lg:text-[84px] xl:text-[100px]">
                   Reclaimed.
                 </span>
               </motion.h1>
@@ -360,7 +360,7 @@ const Hero = () => {
             </motion.div>
 
             {/* Pre / Post state label — desktop only, crossfades with scroll */}
-            <div className="hidden lg:block relative h-6 mb-8">
+            <div className="hidden md:block relative h-6 mb-8">
               <motion.div style={{ opacity: beforeOpacity }} className="absolute inset-0 flex items-center gap-2.5">
                 <div className="w-[3px] h-5 bg-brand-orange rounded-full shrink-0" />
                 <span className="text-brand-orange font-black text-[10px] uppercase tracking-[0.32em]">Pre Garage Reboot</span>
@@ -424,7 +424,7 @@ const Hero = () => {
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
-        className="hidden lg:block absolute right-16 xl:right-24 z-30 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 xl:p-6 max-w-[250px] xl:max-w-[270px]"
+        className="hidden md:block absolute right-16 xl:right-24 z-30 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 xl:p-6 max-w-[220px] lg:max-w-[250px] xl:max-w-[270px]"
         style={{ top: 'calc(96px + 6vh)', transform: 'none' }}
       >
         {/* Stars */}
