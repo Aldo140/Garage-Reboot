@@ -12,6 +12,9 @@ import wideLandingImg from '@/images/wide-landing.png';
 import logoImg from '@/images/logo.png';
 import heroBeforeImg from '@/images/hero-before.png';
 import heroAfterImg from '@/images/hero-after.png';
+import extra1Img from '@/images/extra1.png';
+import extra2Img from '@/images/extra2.png';
+import extra3Img from '@/images/extra3.png';
 import illCleaning from '@/images/small-illustration-cleaning.png';
 import illJunkRemoval from '@/images/small-illustration-JunkRemoval.png';
 import illResidence from '@/images/small-illustration-residence.png';
@@ -151,6 +154,8 @@ const Navbar = () => {
   );
 };
 
+const HERO_SLIDES = [heroBeforeImg, heroAfterImg, extra1Img, extra2Img, extra3Img];
+
 const Hero = () => {
   const heroRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
@@ -160,20 +165,48 @@ const Hero = () => {
   const beforeOpacity = useTransform(scrollYProgress, [0.03, 0.14], [1, 0]);
   const afterOpacity  = useTransform(scrollYProgress, [0.03, 0.14], [0, 1]);
 
+  const [slideIdx, setSlideIdx] = useState(0);
+  useEffect(() => {
+    const t = setInterval(() => setSlideIdx(i => (i + 1) % HERO_SLIDES.length), 3600);
+    return () => clearInterval(t);
+  }, []);
+
   return (
     <section ref={heroRef} className="relative bg-brand-navy overflow-hidden">
 
-      {/* ── MOBILE: full-width image ── */}
+      {/* ── MOBILE: auto-slideshow ── */}
       <div className="lg:hidden mt-20">
-        <div className="relative">
-          <img
-            src={heroBeforeImg}
-            alt="Calgary Garage Before — Aspen Woods"
-            className="w-full h-auto object-cover"
-            referrerPolicy="no-referrer"
-          />
-          <div className="absolute bottom-3 right-3 flex items-center gap-2 bg-brand-orange/95 text-white px-3 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg backdrop-blur-sm">
-            Your garage today?
+        <div className="relative overflow-hidden" style={{ aspectRatio: '4/3' }}>
+          <AnimatePresence>
+            <motion.img
+              key={slideIdx}
+              src={HERO_SLIDES[slideIdx]}
+              alt="Calgary garage transformation"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.8, ease: 'easeInOut' }}
+              className="absolute inset-0 w-full h-full object-cover"
+              referrerPolicy="no-referrer"
+            />
+          </AnimatePresence>
+
+          {/* Progress dots */}
+          <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
+            {HERO_SLIDES.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setSlideIdx(i)}
+                className={`rounded-full transition-all duration-300 ${
+                  i === slideIdx ? 'w-6 h-1.5 bg-brand-orange' : 'w-1.5 h-1.5 bg-white/40 hover:bg-white/70'
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Badge */}
+          <div className="absolute top-3 right-3 z-10 flex items-center gap-2 bg-brand-orange/95 text-white px-3 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg backdrop-blur-sm">
+            Calgary Garages
           </div>
         </div>
       </div>
