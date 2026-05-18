@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://garagereboot.ca/sitemap.xml
+Sitemap: https://garagereboot.vercel.app/sitemap.xml
