@@ -156,17 +156,18 @@ const Hero = () => {
   return (
     <section ref={heroRef} className="relative bg-brand-navy overflow-hidden">
 
-      {/* ── MOBILE: compact proof image strip ── */}
-      <div className="lg:hidden relative overflow-hidden mt-20 bg-[#071f55]">
-        <img
-          src="https://www.image2url.com/r2/default/images/1779108806945-2316eeed-e2c8-4770-ae6d-b4fc1dd0adb0.png"
-          alt="Calgary Garage Before — Aspen Woods"
-          className="w-full h-auto object-cover object-center"
-          referrerPolicy="no-referrer"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-brand-navy/10 via-transparent to-brand-navy" />
-        <div className="absolute bottom-3 right-3 flex items-center gap-2 bg-brand-orange/95 text-white px-3 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg backdrop-blur-sm">
-          Your garage today?
+      {/* ── MOBILE: floating image ── */}
+      <div className="lg:hidden mt-20 px-4 pt-5 pb-2">
+        <div className="relative">
+          <img
+            src="https://www.image2url.com/r2/default/images/1779108806945-2316eeed-e2c8-4770-ae6d-b4fc1dd0adb0.png"
+            alt="Calgary Garage Before — Aspen Woods"
+            className="w-full h-auto object-cover rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+            referrerPolicy="no-referrer"
+          />
+          <div className="absolute bottom-3 right-3 flex items-center gap-2 bg-brand-orange/95 text-white px-3 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg backdrop-blur-sm">
+            Your garage today?
+          </div>
         </div>
       </div>
 
@@ -364,7 +365,7 @@ const Hero = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
         className="hidden lg:block absolute right-16 xl:right-24 z-20 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 xl:p-6 max-w-[250px] xl:max-w-[270px]"
-        style={{ top: '34%', transform: 'translateY(-50%)' }}
+        style={{ top: '22%', transform: 'translateY(-50%)' }}
       >
         {/* Stars */}
         <div className="flex text-brand-orange mb-3">
