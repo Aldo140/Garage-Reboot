@@ -163,13 +163,13 @@ const Hero = () => {
   return (
     <section ref={heroRef} className="relative bg-brand-navy overflow-hidden">
 
-      {/* ── MOBILE: floating image ── */}
-      <div className="lg:hidden mt-20 px-4 pt-5 pb-2">
+      {/* ── MOBILE: full-width image ── */}
+      <div className="lg:hidden mt-20">
         <div className="relative">
           <img
             src={heroBeforeImg}
             alt="Calgary Garage Before — Aspen Woods"
-            className="w-full h-auto object-cover rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
+            className="w-full h-auto object-cover"
             referrerPolicy="no-referrer"
           />
           <div className="absolute bottom-3 right-3 flex items-center gap-2 bg-brand-orange/95 text-white px-3 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest shadow-lg backdrop-blur-sm">
