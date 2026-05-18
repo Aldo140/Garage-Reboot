@@ -1,33 +1,113 @@
-# Garage Reboot Calgary 🏔️
+# Garage Reboot — Calgary's Cleanout & Moving Service
 
-Specialized garage transformations for the Calgary climate. We help you beat the frost and reclaim your space.
+Landing page for **Garage Reboot**, a Calgary-based residential and commercial garage cleanout, junk removal, and moving service.
 
-## Recent Transformations
-
-### Aspen Woods Reset (Southwest Calgary)
-- **Before:** [View Image](https://www.image2url.com/r2/default/images/1779108806945-2316eeed-e2c8-4770-ae6d-b4fc1dd0adb0.png)
-- **After:** [View Image](https://www.image2url.com/r2/default/images/1779108810514-57bb9fc8-cf96-4558-a5bb-820e64eb3350.png)
-
-### Estate Cleanout (Mount Royal)
-- **Before:** [View Image](https://www.image2url.com/r2/default/images/1779113094140-19a1f514-3650-47f6-93d1-7425638cb1c4.png)
-- **After:** [View Image](https://www.image2url.com/r2/default/images/1779113099401-74683ad9-a22b-44ae-bbf2-625902ac214e.png)
-
-## Services
-- **Garage Cleanouts:** Junk removal, heavy lifting, and sweeping. [View Image](https://www.image2url.com/r2/default/images/1779113102941-f2f76710-6506-4d1f-b5d8-92f16d21fa29.png)
-- **Junk Removal:** Responsible disposal of appliances and clutter. [View Image](https://www.image2url.com/r2/default/images/1779114222127-e7f1d087-5d7e-4a3e-b0e0-172d14b1d3de.png)
-- **Student Moving & Storage:** Semester transitions made easy for Calgary students. Efficient move-in/out services.
-- **Commercial Junk Removal:** Priority clearing for retail, office, and commercial spaces.
-- **Full-Service Moving:** Local Alberta moves. High-speed, professional packing and transport.
-- **Move-Out Specialist:** Rapid resets for property handovers.
-
-## Service Area
-Serving Calgary and a 3-hour radius, including:
-- **Calgary** (All quadrants)
-- **Banff & Canmore**
-- **Okotoks & High River**
-- **Brooks & Lethbridge**
-- **Airdrie & Cochrane**
-- All surrounding rural Southern Alberta communities.
+**Live site:** [aldo140.github.io/Garage-Reboot](https://aldo140.github.io/Garage-Reboot/)
 
 ---
-*Serving Southern Alberta with pride.*
+
+## Stack
+
+| Layer | Tech |
+|---|---|
+| Framework | React 19 + TypeScript |
+| Build tool | Vite 6 |
+| Styling | Tailwind CSS v4 (`@theme` config, no config file) |
+| Animation | Framer Motion (`motion/react`) |
+| Icons | Lucide React |
+| Deploy | GitHub Pages via `gh-pages` |
+
+---
+
+## Getting Started
+
+```bash
+npm install
+npm run dev        # http://localhost:3000
+```
+
+---
+
+## Scripts
+
+| Command | Description |
+|---|---|
+| `npm run dev` | Local dev server on port 3000 |
+| `npm run build` | Production build → `dist/` |
+| `npm run lint` | TypeScript type check |
+| `npm run deploy` | Build + push to `gh-pages` branch |
+
+---
+
+## Project Structure
+
+```
+src/
+  App.tsx            # All components (single-file architecture)
+  index.css          # Tailwind @theme, custom CSS (marquee, truck, pricing cards)
+  declarations.d.ts  # Image module declarations
+images/
+  wide-landing.png
+  services-card.png
+  small-illustration-*.png
+public/
+  favicon.svg
+```
+
+---
+
+## Brand
+
+| Token | Value |
+|---|---|
+| Navy | `#041B4D` |
+| Orange | `#FF6A00` |
+| Green | `#6BCB16` |
+| Charcoal | `#232323` |
+| Soft | `#F2F2F2` |
+| Display font | Oswald 700 |
+| Body font | Inter |
+
+---
+
+## Sections
+
+- **Hero** — Parallax image, scroll-triggered before → after crossfade (desktop), rotating word badge
+- **Gallery** — Side-by-side before/after project panels
+- **Process** — 3-step cleanout method
+- **Services** — Dark bento grid with branded illustrations
+- **Pricing** — 3-tab scenario picker (Haul Away / Just the Muscle / Moving) with FAQ accordion
+- **Service Area** — Alberta route list, stats strip, full-width CTA
+- **Testimonials** — Google review cards
+- **Contact** — Floating-label quote form
+
+---
+
+## Deploying
+
+The site deploys to the `gh-pages` branch automatically:
+
+```bash
+npm run deploy
+```
+
+GitHub Pages must be configured to serve from the `gh-pages` branch (Settings → Pages → Source → `gh-pages` / root).
+
+---
+
+## Services
+
+- **Garage Cleanouts** — Full junk removal, heavy lifting, and final sweep
+- **Junk Removal** — Appliances, clutter, same-day available
+- **Student Moving** — Semester transitions, fast turnaround
+- **Move-Out** — Clear leftovers, stay on schedule
+- **Full Moving** — Packing to delivery, local Alberta
+- **Commercial** — Office and retail clear-outs
+
+## Service Area
+
+Calgary and a 3-hour radius — all quadrants of Calgary, Airdrie, Cochrane, Okotoks, High River, Banff, Canmore, Brooks, Lethbridge, and rural Southern Alberta.
+
+---
+
+*100% Calgarian owned. We clear space. You reclaim life.*
