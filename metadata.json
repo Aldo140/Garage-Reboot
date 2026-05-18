@@ -1,0 +1,8 @@
+{
+  "name": "Garage Reboot: Calgary's Transformation Specialists",
+  "description": "Premium garage cleanouts, junk removal, and moving services serving Calgary, Banff, Lethbridge, and Southern Alberta. Specialized student moving and commercial solutions available.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
