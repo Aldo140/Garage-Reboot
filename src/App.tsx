@@ -512,13 +512,22 @@ const Services = () => {
       borderColor: 'border-brand-green/20',
       ill: illJunkRemoval,
     },
+    {
+      num: '03',
+      title: 'Estate Cleanouts',
+      desc: 'Handling a loved one\'s home or a full property clear-out? We do it with care, speed, and dignity.',
+      badge: 'Full Property',
+      accentColor: 'from-white/10 to-transparent',
+      borderColor: 'border-white/15',
+      ill: illResidence,
+    },
   ];
 
   const secondary = [
-    { num: '03', title: 'Student Moving', desc: 'Semester transitions, done.', badge: 'Semester Deal', ill: illResidence },
-    { num: '04', title: 'Move-Out', desc: 'Clear leftovers, stay on schedule.', badge: 'Realtor Pick', ill: illThumbsUp },
-    { num: '05', title: 'Full Moving', desc: 'Packing to delivery, handled.', badge: 'Elite Precision', ill: illResidence },
-    { num: '06', title: 'Commercial', desc: 'Office & retail clear-outs.', badge: 'B2B Priority', ill: illJunkRemoval },
+    { num: '04', title: 'Student Moving', desc: 'Semester transitions, done.', badge: 'Semester Deal', ill: illResidence },
+    { num: '05', title: 'Move-Out', desc: 'Clear leftovers, stay on schedule.', badge: 'Realtor Pick', ill: illThumbsUp },
+    { num: '06', title: 'Full Moving', desc: 'Packing to delivery, handled.', badge: 'Elite Precision', ill: illResidence },
+    { num: '07', title: 'Commercial', desc: 'Office & retail clear-outs.', badge: 'B2B Priority', ill: illJunkRemoval },
   ];
 
   return (
@@ -535,7 +544,7 @@ const Services = () => {
           className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-14 gap-4"
         >
           <div>
-            <div className="text-brand-green font-black uppercase text-[10px] tracking-[0.4em] mb-3">What We Do · 6 Services</div>
+            <div className="text-brand-green font-black uppercase text-[10px] tracking-[0.4em] mb-3">What We Do · 7 Services</div>
             <h2 className="font-display text-5xl sm:text-7xl md:text-[88px] font-black uppercase tracking-tighter leading-none text-white">
               Our <span className="text-brand-orange">Impact</span>
             </h2>
@@ -546,7 +555,7 @@ const Services = () => {
         </motion.div>
 
         {/* Featured: 2 large bento cards */}
-        <div className="grid md:grid-cols-2 gap-3 mb-3">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
           {featured.map((svc, i) => (
             <motion.div
               key={svc.num}
@@ -1386,9 +1395,10 @@ const ContactForm = () => {
                   <option value="" disabled hidden> </option>
                   <option>Full Garage Reboot</option>
                   <option>Junk Removal (Commercial/Res)</option>
+                  <option>Estate Cleanout</option>
                   <option>Student Move Out/In</option>
                   <option>Full Moving Service</option>
-                  <option>Estate/Move-Out Service</option>
+                  <option>Move-Out Service</option>
                 </select>
                 <span className="contact-bar" />
                 <label className="contact-label">Service Required</label>
