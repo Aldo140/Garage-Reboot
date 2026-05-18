@@ -1744,63 +1744,93 @@ const CREW_SHOTS = [
   { img: teamTruckImg,   label: 'Full Truck Load-Out',        caption: 'Big jobs, bigger results. Loaded and gone.' },
 ];
 
-const CrewInAction = () => (
-  <section className="bg-brand-charcoal overflow-hidden">
-    {/* Top label bar */}
-    <div className="border-b border-white/8 px-4 sm:px-8 lg:px-20 py-5 flex items-center justify-between max-w-[1440px] mx-auto">
-      <div className="flex items-center gap-3">
-        <div className="w-1.5 h-1.5 rounded-full bg-brand-orange" />
-        <span className="font-black uppercase text-[10px] tracking-[0.4em] text-white/40">Real Crew · Real Work</span>
+const CrewInAction = () => {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const handleScroll = () => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const idx = Math.round(el.scrollLeft / el.offsetWidth);
+    setActiveIdx(idx);
+  };
+
+  const goTo = (i: number) => {
+    scrollRef.current?.scrollTo({ left: i * scrollRef.current.offsetWidth, behavior: 'smooth' });
+  };
+
+  return (
+    <section className="bg-brand-charcoal overflow-hidden">
+      {/* Top label bar */}
+      <div className="border-b border-white/8 px-4 sm:px-8 lg:px-20 py-5 flex items-center justify-between max-w-[1440px] mx-auto">
+        <div className="flex items-center gap-3">
+          <div className="w-1.5 h-1.5 rounded-full bg-brand-orange" />
+          <span className="font-black uppercase text-[10px] tracking-[0.4em] text-white/40">Real Crew · Real Work</span>
+        </div>
+        <span className="font-black uppercase text-[10px] tracking-[0.4em] text-white/20 hidden sm:block">Calgary, AB</span>
       </div>
-      <span className="font-black uppercase text-[10px] tracking-[0.4em] text-white/20 hidden sm:block">Calgary, AB</span>
-    </div>
 
-    {/* Photo strip */}
-    <div className="grid grid-cols-1 sm:grid-cols-3">
-      {CREW_SHOTS.map((shot, i) => (
-        <motion.div
-          key={i}
-          initial={{ opacity: 0, scale: 1.04 }}
-          whileInView={{ opacity: 1, scale: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.75, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
-          className="relative overflow-hidden group"
-          style={{ aspectRatio: '4/3' }}
-        >
-          <img
-            src={shot.img}
-            alt={shot.label}
-            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+      {/* Photo strip — swipe on mobile, grid on sm+ */}
+      <div
+        ref={scrollRef}
+        onScroll={handleScroll}
+        className="flex sm:grid sm:grid-cols-3 overflow-x-auto sm:overflow-visible snap-x snap-mandatory sm:snap-none"
+        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+      >
+        {CREW_SHOTS.map((shot, i) => (
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, scale: 1.04 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.75, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+            className="relative overflow-hidden group snap-start shrink-0 w-full sm:w-auto"
+            style={{ aspectRatio: '16/10' }}
+          >
+            <img
+              src={shot.img}
+              alt={shot.label}
+              className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+            <div className="absolute inset-y-0 left-0 w-[3px] bg-brand-orange scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom" />
+            <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+              <p className="font-black uppercase text-[9px] tracking-[0.35em] text-brand-orange mb-1.5">
+                {String(i + 1).padStart(2, '0')} — {shot.label}
+              </p>
+              <p className="text-white/60 text-xs font-medium leading-snug">{shot.caption}</p>
+            </div>
+            <span className="absolute top-4 right-4 font-display font-black text-white/[0.07] text-6xl leading-none pointer-events-none select-none">
+              {String(i + 1).padStart(2, '0')}
+            </span>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Mobile dots */}
+      <div className="flex sm:hidden justify-center gap-2 py-3 bg-brand-charcoal">
+        {CREW_SHOTS.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => goTo(i)}
+            className={`rounded-full transition-all duration-300 ${
+              i === activeIdx ? 'w-5 h-1.5 bg-brand-orange' : 'w-1.5 h-1.5 bg-white/20'
+            }`}
           />
-          {/* Dark gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
-          {/* Thin orange left border on hover */}
-          <div className="absolute inset-y-0 left-0 w-[3px] bg-brand-orange scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom" />
-          {/* Text */}
-          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
-            <p className="font-black uppercase text-[9px] tracking-[0.35em] text-brand-orange mb-1.5">
-              {String(i + 1).padStart(2, '0')} — {shot.label}
-            </p>
-            <p className="text-white/60 text-xs font-medium leading-snug">{shot.caption}</p>
-          </div>
-          {/* Vertical number — top right */}
-          <span className="absolute top-4 right-4 font-display font-black text-white/[0.07] text-6xl leading-none pointer-events-none select-none">
-            {String(i + 1).padStart(2, '0')}
-          </span>
-        </motion.div>
-      ))}
-    </div>
+        ))}
+      </div>
 
-    {/* Bottom strip */}
-    <div className="border-t border-white/8 px-4 sm:px-8 lg:px-20 py-5 flex items-center gap-6 max-w-[1440px] mx-auto">
-      <span className="font-black uppercase text-[10px] tracking-[0.35em] text-white/25">Garage Reboot Team</span>
-      <div className="flex-1 h-px bg-white/8" />
-      <a href="#contact" className="font-black uppercase text-[10px] tracking-[0.35em] text-brand-orange hover:text-white transition-colors">
-        Book Your Job →
-      </a>
-    </div>
-  </section>
-);
+      {/* Bottom strip */}
+      <div className="border-t border-white/8 px-4 sm:px-8 lg:px-20 py-5 flex items-center gap-6 max-w-[1440px] mx-auto">
+        <span className="font-black uppercase text-[10px] tracking-[0.35em] text-white/25">Garage Reboot Team</span>
+        <div className="flex-1 h-px bg-white/8" />
+        <a href="#contact" className="font-black uppercase text-[10px] tracking-[0.35em] text-brand-orange hover:text-white transition-colors">
+          Book Your Job →
+        </a>
+      </div>
+    </section>
+  );
+};
 
 // --- Splash Screen ---
 
