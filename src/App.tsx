@@ -1170,20 +1170,21 @@ const ContactForm = () => {
     e.preventDefault();
     setStatus('sending');
     try {
-      const res = await fetch('https://formsubmit.co/ajax/jorti104@mtroyal.ca', {
+      const res = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: JSON.stringify({
+          access_key: import.meta.env.VITE_WEB3FORMS_KEY,
+          subject: `Garage Reboot Quote — ${form.service}`,
+          from_name: 'Garage Reboot Website',
           Name: form.name,
           Phone: form.phone,
           Service: form.service,
           Details: form.details,
-          _subject: `Garage Reboot Quote — ${form.service}`,
-          _captcha: 'false',
         }),
       });
       const data = await res.json();
-      if (data.success === 'true' || data.success === true) {
+      if (data.success) {
         setStatus('success');
         setForm({ name: '', phone: '', service: '', details: '' });
       } else {
