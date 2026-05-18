@@ -6,6 +6,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'motion/react';
 import wideLandingImg from '@/images/wide-landing.png';
+import logoImg from '@/images/logo.png';
+import heroBeforeImg from '@/images/hero-before.png';
+import heroAfterImg from '@/images/hero-after.png';
 import illCleaning from '@/images/small-illustration-cleaning.png';
 import illJunkRemoval from '@/images/small-illustration-JunkRemoval.png';
 import illResidence from '@/images/small-illustration-residence.png';
@@ -55,10 +58,9 @@ const Navbar = () => {
         <a href="#" className="flex items-center gap-3 group">
           <div className="w-14 h-14 relative flex items-center justify-center transform transition-all group-hover:scale-110">
             <img
-              src="https://www.image2url.com/r2/default/images/1779109344764-ce05d11d-c3e6-483d-a9ad-bde524b2c70c.png"
+              src={logoImg}
               alt="Garage Reboot Logo"
               className="w-full h-full object-contain"
-              referrerPolicy="no-referrer"
             />
           </div>
           <div className="flex flex-col -gap-1">
@@ -160,7 +162,7 @@ const Hero = () => {
       <div className="lg:hidden mt-20 px-4 pt-5 pb-2">
         <div className="relative">
           <img
-            src="https://www.image2url.com/r2/default/images/1779108806945-2316eeed-e2c8-4770-ae6d-b4fc1dd0adb0.png"
+            src={heroBeforeImg}
             alt="Calgary Garage Before — Aspen Woods"
             className="w-full h-auto object-cover rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.5)]"
             referrerPolicy="no-referrer"
@@ -175,7 +177,7 @@ const Hero = () => {
       <div className="hidden lg:block absolute inset-y-0 right-0 w-[52%] overflow-hidden">
         {/* Before */}
         <motion.img
-          src="https://www.image2url.com/r2/default/images/1779108806945-2316eeed-e2c8-4770-ae6d-b4fc1dd0adb0.png"
+          src={heroBeforeImg}
           alt="Calgary Garage Before — Aspen Woods"
           style={{ y: imgY, opacity: beforeOpacity }}
           className="absolute inset-0 w-full h-[115%] object-cover"
@@ -183,7 +185,7 @@ const Hero = () => {
         />
         {/* After */}
         <motion.img
-          src="https://www.image2url.com/r2/default/images/1779108810514-57bb9fc8-cf96-4558-a5bb-820e64eb3350.png"
+          src={heroAfterImg}
           alt="Calgary Garage After — Aspen Woods"
           style={{ y: imgY, opacity: afterOpacity }}
           className="absolute inset-0 w-full h-[115%] object-cover"
@@ -1406,8 +1408,8 @@ const Gallery = () => {
   const projects = [
     {
       num: "01",
-      before: "https://www.image2url.com/r2/default/images/1779108806945-2316eeed-e2c8-4770-ae6d-b4fc1dd0adb0.png",
-      after: "https://www.image2url.com/r2/default/images/1779108810514-57bb9fc8-cf96-4558-a5bb-820e64eb3350.png",
+      before: heroBeforeImg,
+      after: heroAfterImg,
       title: "Aspen Woods Reset",
       loc: "Southwest Calgary",
       service: "Full Garage Cleanout"
@@ -1564,11 +1566,49 @@ const Gallery = () => {
   );
 };
 
+// --- Splash Screen ---
+
+const SplashScreen = () => (
+  <motion.div
+    key="splash"
+    initial={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+    transition={{ duration: 0.55, ease: 'easeInOut' }}
+    className="fixed inset-0 z-[9999] bg-brand-navy flex flex-col items-center justify-center gap-8"
+  >
+    <motion.img
+      src={logoImg}
+      alt="Garage Reboot"
+      initial={{ scale: 0.72, opacity: 0 }}
+      animate={{ scale: 1, opacity: 1 }}
+      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+      className="w-44 h-44 sm:w-56 sm:h-56 drop-shadow-2xl"
+    />
+    <div className="relative w-36 h-[2px] bg-white/10 rounded-full overflow-hidden">
+      <motion.div
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: 1 }}
+        transition={{ duration: 1.4, delay: 0.25, ease: 'easeInOut' }}
+        style={{ originX: 0 }}
+        className="absolute inset-0 bg-brand-orange rounded-full"
+      />
+    </div>
+  </motion.div>
+);
+
 // --- Main App ---
 
 export default function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const t = setTimeout(() => setLoading(false), 1900);
+    return () => clearTimeout(t);
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
+      <AnimatePresence>{loading && <SplashScreen />}</AnimatePresence>
       <Navbar />
       <Hero />
 
