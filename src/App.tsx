@@ -23,6 +23,9 @@ import serviceAreaMapImg from '@/images/sections/service-area-map.webp';
 import servicesCardImg from '@/images/sections/services-card.webp';
 import reviewsImg from '@/images/illustrations/reviews.png';
 import qnaImg from '@/images/illustrations/qna.png';
+import teamIndoorImg from '@/images/team/indoor-cleanout.webp';
+import teamGarageImg from '@/images/team/garage-haul.webp';
+import teamTruckImg from '@/images/team/truck-load.webp';
 import {
   Car,
   Trash2,
@@ -1730,6 +1733,72 @@ const Process = () => {
   );
 };
 
+// --- Crew In Action ---
+
+const CREW_SHOTS = [
+  { img: teamIndoorImg,  label: 'Room & Apartment Cleanouts', caption: 'We clear every corner — boxes, furniture, the works.' },
+  { img: teamGarageImg,  label: 'Garage Haul-Away',           caption: 'Bags out, space reclaimed. One trip, done right.' },
+  { img: teamTruckImg,   label: 'Full Truck Load-Out',        caption: 'Big jobs, bigger results. Loaded and gone.' },
+];
+
+const CrewInAction = () => (
+  <section className="bg-brand-charcoal overflow-hidden">
+    {/* Top label bar */}
+    <div className="border-b border-white/8 px-4 sm:px-8 lg:px-20 py-5 flex items-center justify-between max-w-[1440px] mx-auto">
+      <div className="flex items-center gap-3">
+        <div className="w-1.5 h-1.5 rounded-full bg-brand-orange" />
+        <span className="font-black uppercase text-[10px] tracking-[0.4em] text-white/40">Real Crew · Real Work</span>
+      </div>
+      <span className="font-black uppercase text-[10px] tracking-[0.4em] text-white/20 hidden sm:block">Calgary, AB</span>
+    </div>
+
+    {/* Photo strip */}
+    <div className="grid grid-cols-1 sm:grid-cols-3">
+      {CREW_SHOTS.map((shot, i) => (
+        <motion.div
+          key={i}
+          initial={{ opacity: 0, scale: 1.04 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.75, delay: i * 0.12, ease: [0.16, 1, 0.3, 1] }}
+          className="relative overflow-hidden group"
+          style={{ aspectRatio: '4/3' }}
+        >
+          <img
+            src={shot.img}
+            alt={shot.label}
+            className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+          />
+          {/* Dark gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+          {/* Thin orange left border on hover */}
+          <div className="absolute inset-y-0 left-0 w-[3px] bg-brand-orange scale-y-0 group-hover:scale-y-100 transition-transform duration-500 origin-bottom" />
+          {/* Text */}
+          <div className="absolute bottom-0 left-0 right-0 p-5 sm:p-6">
+            <p className="font-black uppercase text-[9px] tracking-[0.35em] text-brand-orange mb-1.5">
+              {String(i + 1).padStart(2, '0')} — {shot.label}
+            </p>
+            <p className="text-white/60 text-xs font-medium leading-snug">{shot.caption}</p>
+          </div>
+          {/* Vertical number — top right */}
+          <span className="absolute top-4 right-4 font-display font-black text-white/[0.07] text-6xl leading-none pointer-events-none select-none">
+            {String(i + 1).padStart(2, '0')}
+          </span>
+        </motion.div>
+      ))}
+    </div>
+
+    {/* Bottom strip */}
+    <div className="border-t border-white/8 px-4 sm:px-8 lg:px-20 py-5 flex items-center gap-6 max-w-[1440px] mx-auto">
+      <span className="font-black uppercase text-[10px] tracking-[0.35em] text-white/25">Garage Reboot Team</span>
+      <div className="flex-1 h-px bg-white/8" />
+      <a href="#contact" className="font-black uppercase text-[10px] tracking-[0.35em] text-brand-orange hover:text-white transition-colors">
+        Book Your Job →
+      </a>
+    </div>
+  </section>
+);
+
 // --- Splash Screen ---
 
 const SplashScreen = () => (
@@ -1809,6 +1878,7 @@ export default function App() {
 
       <Gallery />
       <Process />
+      <CrewInAction />
       <Services />
       <TruckDivider />
       <Pricing />
