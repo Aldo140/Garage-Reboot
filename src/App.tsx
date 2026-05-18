@@ -1212,6 +1212,7 @@ const ContactForm = () => {
   const [form, setForm] = useState({ name: '', email: '', phone: '', service: '', details: '' });
   const [files, setFiles] = useState<File[]>([]);
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -1251,9 +1252,12 @@ const ContactForm = () => {
         setForm({ name: '', email: '', phone: '', service: '', details: '' });
         setFiles([]);
       } else {
+        setErrorMsg(data.message ?? 'Unknown error');
+        console.error('Web3Forms error:', data);
         setStatus('error');
       }
-    } catch {
+    } catch (err) {
+      setErrorMsg(String(err));
       setStatus('error');
     }
   };
@@ -1392,7 +1396,7 @@ const ContactForm = () => {
 
               {status === 'error' && (
                 <p className="text-red-500 text-sm font-bold text-center -mt-4">
-                  Something went wrong — please try again or call us directly.
+                  {errorMsg ? `Error: ${errorMsg}` : 'Something went wrong — please try again or call us directly.'}
                 </p>
               )}
 
@@ -1482,8 +1486,8 @@ const Gallery = () => {
   ];
 
   return (
-    <section ref={sectionRef} id="gallery" className="relative py-16 md:py-32 bg-white overflow-hidden">
-      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-brand-soft to-transparent pointer-events-none" />
+    <section ref={sectionRef} id="gallery" className="relative py-16 md:py-32 bg-brand-navy md:bg-white overflow-hidden">
+      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-brand-navy md:from-brand-soft to-transparent pointer-events-none" />
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20">
 
         {/* Section header */}
@@ -1495,7 +1499,7 @@ const Gallery = () => {
           className="relative mb-9 md:mb-20"
         >
           <div className="text-brand-orange font-black uppercase text-[10px] tracking-[0.32em] sm:tracking-[0.4em] mb-3 sm:mb-4">Before &amp; After</div>
-          <h2 className="font-display text-[42px] sm:text-6xl md:text-7xl xl:text-[96px] font-black uppercase tracking-tighter leading-[0.9] text-brand-navy">
+          <h2 className="font-display text-[42px] sm:text-6xl md:text-7xl xl:text-[96px] font-black uppercase tracking-tighter leading-[0.9] text-white md:text-brand-navy">
             Real Results.<br />
             <span className="text-brand-green">Real Calgary Homes.</span>
           </h2>
@@ -1510,7 +1514,7 @@ const Gallery = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.6 }}
-              className="relative rounded-2xl border border-brand-navy/10 bg-brand-navy p-3 shadow-[0_16px_45px_rgba(4,27,77,0.18)] sm:bg-white sm:p-0 sm:border-0 sm:shadow-none"
+              className="relative p-0 sm:rounded-2xl sm:border sm:border-brand-navy/10 sm:bg-white sm:shadow-[0_16px_45px_rgba(4,27,77,0.18)]"
             >
               {/* Ghost project number */}
               <span className="absolute -top-3 right-3 sm:left-0 sm:right-auto font-display text-[74px] sm:text-[100px] md:text-[160px] font-black text-white/[0.08] sm:text-brand-navy/[0.04] leading-none select-none pointer-events-none z-0">
@@ -1607,9 +1611,9 @@ const Gallery = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
-          className="mt-16 md:mt-24 flex flex-col sm:flex-row items-center justify-between gap-6 py-8 border-t-2 border-brand-navy/8"
+          className="mt-16 md:mt-24 flex flex-col sm:flex-row items-center justify-between gap-6 py-8 border-t-2 border-white/15 md:border-brand-navy/8"
         >
-          <p className="font-display text-2xl md:text-3xl font-black uppercase text-brand-navy text-center sm:text-left leading-tight">
+          <p className="font-display text-2xl md:text-3xl font-black uppercase text-white md:text-brand-navy text-center sm:text-left leading-tight">
             Your garage could be{' '}
             <span className="text-brand-green">next.</span>
           </p>
