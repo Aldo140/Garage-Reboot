@@ -162,8 +162,8 @@ const Hero = () => {
   const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.6], ['0%', '-8%']);
-  const beforeOpacity = useTransform(scrollYProgress, [0.03, 0.14], [1, 0]);
-  const afterOpacity  = useTransform(scrollYProgress, [0.03, 0.14], [0, 1]);
+  const beforeOpacity = useTransform(scrollYProgress, [0.08, 0.22], [1, 0]);
+  const afterOpacity  = useTransform(scrollYProgress, [0.08, 0.22], [0, 1]);
 
   const [slideIdx, setSlideIdx] = useState(0);
   useEffect(() => {
@@ -229,6 +229,14 @@ const Hero = () => {
           className="absolute inset-0 w-full h-[115%] object-cover"
           referrerPolicy="no-referrer"
         />
+        {/* "Before" badge — fades out as image transitions */}
+        <motion.div
+          style={{ opacity: beforeOpacity }}
+          className="absolute top-6 left-6 z-10 flex items-center gap-1.5 bg-brand-orange/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg"
+        >
+          <div className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
+          <span className="text-white text-[10px] font-black uppercase tracking-widest">Before</span>
+        </motion.div>
         {/* "After" badge — fades in with the after image */}
         <motion.div
           style={{ opacity: afterOpacity }}
@@ -350,6 +358,18 @@ const Hero = () => {
                 Before/After
               </a>
             </motion.div>
+
+            {/* Pre / Post state label — desktop only, crossfades with scroll */}
+            <div className="hidden lg:block relative h-6 mb-8">
+              <motion.div style={{ opacity: beforeOpacity }} className="absolute inset-0 flex items-center gap-2.5">
+                <div className="w-[3px] h-5 bg-brand-orange rounded-full shrink-0" />
+                <span className="text-brand-orange font-black text-[10px] uppercase tracking-[0.32em]">Pre Garage Reboot</span>
+              </motion.div>
+              <motion.div style={{ opacity: afterOpacity }} className="absolute inset-0 flex items-center gap-2.5">
+                <div className="w-[3px] h-5 bg-brand-green rounded-full shrink-0" />
+                <span className="text-brand-green font-black text-[10px] uppercase tracking-[0.32em]">Post Garage Reboot ✓</span>
+              </motion.div>
+            </div>
 
             {/* Social proof — compact mobile cards, full row on larger screens */}
             <motion.div
@@ -1713,9 +1733,9 @@ const SplashScreen = () => (
     <motion.img
       src={logoImg}
       alt="Garage Reboot"
-      initial={{ scale: 0.72, opacity: 0 }}
+      initial={{ scale: 0.88, opacity: 0 }}
       animate={{ scale: 1, opacity: 1 }}
-      transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+      transition={{ duration: 0.22, ease: 'easeOut' }}
       className="w-44 h-44 sm:w-56 sm:h-56 drop-shadow-2xl"
     />
     <div className="relative w-36 h-[2px] bg-white/10 rounded-full overflow-hidden">
