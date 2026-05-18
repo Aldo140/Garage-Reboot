@@ -34,7 +34,7 @@
 
 @media (max-width: 639px) {
   .animate-marquee {
-    animation-duration: 14s;
+    animation-duration: 7s;
   }
 }
 
