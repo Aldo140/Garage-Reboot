@@ -364,8 +364,8 @@ const Hero = () => {
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: 0.8, duration: 0.5 }}
-        className="hidden lg:block absolute right-16 xl:right-24 z-20 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 xl:p-6 max-w-[250px] xl:max-w-[270px]"
-        style={{ top: '22%', transform: 'translateY(-50%)' }}
+        className="hidden lg:block absolute right-16 xl:right-24 z-30 bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl p-5 xl:p-6 max-w-[250px] xl:max-w-[270px]"
+        style={{ top: '50%', transform: 'translateY(-50%)' }}
       >
         {/* Stars */}
         <div className="flex text-brand-orange mb-3">
