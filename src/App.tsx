@@ -5,6 +5,9 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'motion/react';
+import { Canvas, useFrame } from '@react-three/fiber';
+import { Float } from '@react-three/drei';
+import type { Group } from 'three';
 import wideLandingImg from '@/images/wide-landing.png';
 import logoImg from '@/images/logo.png';
 import heroBeforeImg from '@/images/hero-before.png';
@@ -390,6 +393,50 @@ const Hero = () => {
   );
 };
 
+// --- 3D Components ---
+
+const FloatingBoxGroup = () => {
+  const groupRef = useRef<Group>(null!);
+
+  useFrame((state) => {
+    groupRef.current.rotation.y = state.clock.elapsedTime * 0.12;
+    groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.55) * 0.18;
+  });
+
+  const boxes: { pos: [number,number,number]; scale: [number,number,number]; color: string; rot: [number,number,number] }[] = [
+    { pos: [0, 0, 0],        scale: [1.3, 1.3, 1.3], color: '#FF6A00', rot: [0.20,  0.40,  0.10] },
+    { pos: [1.9, -0.5, 0.3], scale: [0.9, 0.9, 0.9], color: '#6BCB16', rot: [-0.10, 0.30,  0.20] },
+    { pos: [-1.8, 0.4, -0.4],scale: [1.0, 0.75, 1.0],color: '#232323', rot: [0.15, -0.40,  0.10] },
+    { pos: [0.5, 1.7, -0.3], scale: [0.6, 0.6, 0.6], color: '#FF6A00', rot: [0.30,  0.50, -0.20] },
+    { pos: [-0.7,-1.5, 0.5], scale: [0.7, 0.55, 0.8],color: '#6BCB16', rot: [0.10, -0.30,  0.30] },
+    { pos: [2.2,  1.0, -0.2],scale: [0.5, 0.8, 0.5], color: '#041B4D', rot: [0.40,  0.20, -0.10] },
+  ];
+
+  return (
+    <group ref={groupRef}>
+      {boxes.map((b, i) => (
+        <mesh key={i} position={b.pos} rotation={b.rot} scale={b.scale}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color={b.color} roughness={0.35} metalness={0.18} />
+        </mesh>
+      ))}
+    </group>
+  );
+};
+
+const GarageScene3D = () => (
+  <div className="hidden xl:block absolute -top-8 right-0 w-[400px] h-[340px] pointer-events-none z-0 opacity-30">
+    <Canvas camera={{ position: [0, 0, 7.5], fov: 48 }} gl={{ alpha: true, antialias: true }}>
+      <ambientLight intensity={0.55} />
+      <pointLight position={[4, 4, 5]} intensity={1.8} color="#FF6A00" />
+      <pointLight position={[-3, -2, 2]} intensity={0.7} color="#6BCB16" />
+      <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.9}>
+        <FloatingBoxGroup />
+      </Float>
+    </Canvas>
+  </div>
+);
+
 const Services = () => {
   const featured = [
     {
@@ -422,6 +469,7 @@ const Services = () => {
   return (
     <section id="services" className="py-20 md:py-32 bg-brand-navy overflow-hidden">
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20">
+        <GarageScene3D />
 
         {/* Header */}
         <motion.div
@@ -1405,6 +1453,15 @@ const Footer = () => {
 };
 
 const Gallery = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: galleryScroll } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
+  const before1Y = useTransform(galleryScroll, [0, 1], ['-6%', '6%']);
+  const after1Y  = useTransform(galleryScroll, [0, 1], ['6%', '-6%']);
+  const before2Y = useTransform(galleryScroll, [0, 1], ['4%', '-4%']);
+  const after2Y  = useTransform(galleryScroll, [0, 1], ['-4%', '4%']);
+  const parallaxBefore = [before1Y, before2Y];
+  const parallaxAfter  = [after1Y,  after2Y];
+
   const projects = [
     {
       num: "01",
@@ -1425,7 +1482,7 @@ const Gallery = () => {
   ];
 
   return (
-    <section id="gallery" className="relative py-16 md:py-32 bg-white overflow-hidden">
+    <section ref={sectionRef} id="gallery" className="relative py-16 md:py-32 bg-white overflow-hidden">
       <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-brand-soft to-transparent pointer-events-none" />
       <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20">
 
@@ -1478,10 +1535,11 @@ const Gallery = () => {
               <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-[3px] bg-transparent sm:bg-gray-200 rounded-xl sm:rounded-2xl overflow-visible sm:overflow-hidden sm:shadow-[0_8px_40px_rgba(4,27,77,0.10)]">
                 {/* BEFORE */}
                 <div className="relative overflow-hidden rounded-xl border border-white/10 shadow-lg shadow-black/25 sm:rounded-none sm:border-0 sm:shadow-none" style={{ aspectRatio: '4/3' }}>
-                  <img
+                  <motion.img
                     src={proj.before}
                     alt={`Before — ${proj.title}`}
-                    className="w-full h-full object-cover"
+                    style={{ y: parallaxBefore[i] }}
+                    className="absolute inset-0 w-full h-[115%] -top-[7.5%] object-cover"
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-brand-navy/25" />
@@ -1501,10 +1559,11 @@ const Gallery = () => {
 
                 {/* AFTER */}
                 <div className="relative overflow-hidden rounded-xl border border-brand-green/30 shadow-lg shadow-brand-green/10 sm:rounded-none sm:border-0 sm:shadow-none group" style={{ aspectRatio: '4/3' }}>
-                  <img
+                  <motion.img
                     src={proj.after}
                     alt={`After — ${proj.title}`}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+                    style={{ y: parallaxAfter[i] }}
+                    className="absolute inset-0 w-full h-[115%] -top-[7.5%] object-cover transition-transform duration-700 group-hover:scale-105"
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-brand-navy/5 group-hover:bg-transparent transition-colors duration-500" />
@@ -1561,6 +1620,64 @@ const Gallery = () => {
             Get Free Quote <ArrowRight size={16} />
           </a>
         </motion.div>
+      </div>
+    </section>
+  );
+};
+
+// --- Process Section ---
+
+const Process = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
+  const card0Y = useTransform(scrollYProgress, [0, 1], ['10%', '-10%']);
+  const card1Y = useTransform(scrollYProgress, [0, 1], ['5%',  '-5%']);
+  const card2Y = useTransform(scrollYProgress, [0, 1], ['0%',  '6%']);
+
+  const steps = [
+    { step: '01', title: 'Instant Quote', desc: 'Send us a photo or book a free on-site estimate. No pressure, just transparent pricing.', ill: illThumbsUp },
+    { step: '02', title: 'Rapid Reboot',  desc: 'Our team arrives and clears the clutter. We sweep and do the heavy lifting for you.', ill: illCleaning },
+    { step: '03', title: 'Park Your Car', desc: 'Enjoy your reclaimed space. We handle disposal, recycling, and donations.', ill: illResidence },
+  ];
+  const cardY = [card0Y, card1Y, card2Y];
+
+  return (
+    <section ref={sectionRef} className="py-20 md:py-32 bg-white overflow-hidden">
+      <div className="max-w-[1440px] mx-auto px-4 md:px-12 lg:px-20">
+        <div className="grid lg:grid-cols-12 gap-16 lg:gap-24">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="lg:col-span-4 xl:col-span-3"
+          >
+            <div className="text-brand-orange font-black uppercase text-xs tracking-[0.4em] mb-4">Our Method</div>
+            <h2 className="font-display text-4xl lg:text-5xl xl:text-7xl font-black mb-8 uppercase tracking-tighter leading-[0.9]">
+              3 Steps to <span className="text-brand-orange underline underline-offset-8 decoration-8">Freedom</span>
+            </h2>
+          </motion.div>
+          <div className="lg:col-span-8 xl:col-span-9 grid md:grid-cols-3 gap-12 lg:gap-16">
+            {steps.map((p, i) => (
+              <motion.div
+                key={i}
+                style={{ y: cardY[i] }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.5 }}
+                className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-brand-orange/30 hover:shadow-xl lg:p-6"
+              >
+                <span className="absolute -right-2 -top-3 font-black text-7xl xl:text-8xl text-brand-navy/[0.04] group-hover:text-brand-orange/10 transition-all leading-none">{p.step}</span>
+                <div className="relative z-10 mb-6 flex h-32 items-end justify-center rounded-xl bg-brand-soft">
+                  <img src={p.ill} alt="" className="h-36 w-auto object-contain drop-shadow-xl" />
+                </div>
+                <h3 className="relative z-10 font-black text-2xl xl:text-3xl uppercase tracking-tighter mb-4 text-brand-navy leading-none">{p.title}</h3>
+                <p className="relative z-10 text-gray-500 font-medium leading-relaxed text-base xl:text-lg opacity-80">{p.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -1644,50 +1761,7 @@ export default function App() {
       </div>
 
       <Gallery />
-
-      {/* The Process */}
-      <section className="py-20 md:py-32 bg-white overflow-hidden">
-        <div className="max-w-[1440px] mx-auto px-4 md:px-12 lg:px-20">
-          <div className="grid lg:grid-cols-12 gap-16 lg:gap-24">
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="lg:col-span-4 xl:col-span-3"
-            >
-              <div className="text-brand-orange font-black uppercase text-xs tracking-[0.4em] mb-4">Our Method</div>
-              <h2 className="font-display text-4xl lg:text-5xl xl:text-7xl font-black mb-8 uppercase tracking-tighter leading-[0.9]">
-                3 Steps to <span className="text-brand-orange underline underline-offset-8 decoration-8">Freedom</span>
-              </h2>
-            </motion.div>
-            <div className="lg:col-span-8 xl:col-span-9 grid md:grid-cols-3 gap-12 lg:gap-16">
-              {[
-                { step: "01", title: "Instant Quote", desc: "Send us a photo or book a free on-site estimate. No pressure, just transparent pricing.", ill: illThumbsUp },
-                { step: "02", title: "Rapid Reboot", desc: "Our team arrives and clears the clutter. We sweep and do the heavy lifting for you.", ill: illCleaning },
-                { step: "03", title: "Park Your Car", desc: "Enjoy your reclaimed space. We handle disposal, recycling, and donations.", ill: illResidence }
-              ].map((p, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.15, duration: 0.5 }}
-                  className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-all hover:-translate-y-1 hover:border-brand-orange/30 hover:shadow-xl lg:p-6"
-                >
-                  <span className="absolute -right-2 -top-3 font-black text-7xl xl:text-8xl text-brand-navy/[0.04] group-hover:text-brand-orange/10 transition-all leading-none">{p.step}</span>
-                  <div className="relative z-10 mb-6 flex h-32 items-end justify-center rounded-xl bg-brand-soft">
-                    <img src={p.ill} alt="" className="h-36 w-auto object-contain drop-shadow-xl" />
-                  </div>
-                  <h3 className="relative z-10 font-black text-2xl xl:text-3xl uppercase tracking-tighter mb-4 text-brand-navy leading-none">{p.title}</h3>
-                  <p className="relative z-10 text-gray-500 font-medium leading-relaxed text-base xl:text-lg opacity-80">{p.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
+      <Process />
       <Services />
       <TruckDivider />
       <Pricing />
