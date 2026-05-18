@@ -8,21 +8,21 @@ import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'mot
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
 import type { Group } from 'three';
-import wideLandingImg from '@/images/wide-landing.png';
+import wideLandingImg from '@/images/hero/wide-banner.webp';
 import logoImg from '@/images/logo.png';
-import heroBeforeImg from '@/images/hero-before.png';
-import heroAfterImg from '@/images/hero-after.png';
-import extra1Img from '@/images/extra1.png';
-import extra2Img from '@/images/extra2.png';
-import extra3Img from '@/images/extra3.png';
-import illCleaning from '@/images/small-illustration-cleaning.png';
-import illJunkRemoval from '@/images/small-illustration-JunkRemoval.png';
-import illResidence from '@/images/small-illustration-residence.png';
-import illThumbsUp from '@/images/small-illustration-ThumbsUp.png';
-import serviceAreaMapImg from '@/images/map.png';
-import servicesCardImg from '@/images/services-card.png';
-import reviewsImg from '@/images/reviews.png';
-import qnaImg from '@/images/qna.png';
+import heroBeforeImg from '@/images/hero/before.webp';
+import heroAfterImg from '@/images/hero/after.webp';
+import extra1Img from '@/images/hero/slide-1.webp';
+import extra2Img from '@/images/hero/slide-2.webp';
+import extra3Img from '@/images/hero/slide-3.webp';
+import illCleaning from '@/images/illustrations/cleaning.png';
+import illJunkRemoval from '@/images/illustrations/junk-removal.png';
+import illResidence from '@/images/illustrations/residence.png';
+import illThumbsUp from '@/images/illustrations/thumbs-up.png';
+import serviceAreaMapImg from '@/images/sections/service-area-map.webp';
+import servicesCardImg from '@/images/sections/services-card.webp';
+import reviewsImg from '@/images/illustrations/reviews.png';
+import qnaImg from '@/images/illustrations/qna.png';
 import {
   Car,
   Trash2,
