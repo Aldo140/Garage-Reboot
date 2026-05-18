@@ -18,6 +18,8 @@ import illResidence from '@/images/small-illustration-residence.png';
 import illThumbsUp from '@/images/small-illustration-ThumbsUp.png';
 import serviceAreaMapImg from '@/images/map.png';
 import servicesCardImg from '@/images/services-card.png';
+import reviewsImg from '@/images/reviews.png';
+import qnaImg from '@/images/qna.png';
 import {
   Car,
   Trash2,
@@ -910,9 +912,12 @@ const Pricing = () => {
           transition={{ duration: 0.5 }}
           className="border-t-2 border-brand-navy/8 pt-12"
         >
-          <div className="flex items-center gap-3 mb-8">
-            <h3 className="font-display text-2xl sm:text-3xl font-black uppercase tracking-tight text-brand-navy">Common Questions</h3>
-            <span className="px-2.5 py-1 rounded-full bg-brand-soft text-brand-navy/40 text-[10px] font-black uppercase tracking-widest">{faqs.length} answers</span>
+          <div className="flex items-center justify-between gap-4 mb-8">
+            <div className="flex items-center gap-3">
+              <h3 className="font-display text-2xl sm:text-3xl font-black uppercase tracking-tight text-brand-navy">Common Questions</h3>
+              <span className="px-2.5 py-1 rounded-full bg-brand-soft text-brand-navy/40 text-[10px] font-black uppercase tracking-widest">{faqs.length} answers</span>
+            </div>
+            <img src={qnaImg} alt="" className="hidden sm:block h-24 w-auto object-contain drop-shadow-xl shrink-0" />
           </div>
 
           <div className="grid md:grid-cols-2 gap-2">
@@ -1757,9 +1762,9 @@ export default function App() {
              className="text-center mb-16 md:mb-24"
            >
               <img
-                src={illThumbsUp}
+                src={reviewsImg}
                 alt=""
-                className="mx-auto mb-5 h-28 w-auto object-contain drop-shadow-xl"
+                className="mx-auto mb-5 h-36 w-auto object-contain drop-shadow-xl"
               />
               <div className="text-brand-orange font-black uppercase text-[10px] tracking-[0.4em] mb-4">Real People · Real Results</div>
               <h2 className="font-display text-5xl md:text-8xl xl:text-[100px] font-extrabold mb-4 uppercase tracking-tighter leading-none text-brand-navy">
