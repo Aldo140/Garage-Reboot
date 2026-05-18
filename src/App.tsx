@@ -1413,149 +1413,179 @@ const Footer = () => {
 const Gallery = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress: galleryScroll } = useScroll({ target: sectionRef, offset: ['start end', 'end start'] });
-  const before1Y = useTransform(galleryScroll, [0, 1], ['-6%', '6%']);
-  const after1Y  = useTransform(galleryScroll, [0, 1], ['6%', '-6%']);
-  const before2Y = useTransform(galleryScroll, [0, 1], ['4%', '-4%']);
-  const after2Y  = useTransform(galleryScroll, [0, 1], ['-4%', '4%']);
+  const before1Y = useTransform(galleryScroll, [0, 1], ['-7%', '7%']);
+  const after1Y  = useTransform(galleryScroll, [0, 1], ['5%', '-5%']);
+  const before2Y = useTransform(galleryScroll, [0, 1], ['-5%', '5%']);
+  const after2Y  = useTransform(galleryScroll, [0, 1], ['7%', '-7%']);
   const parallaxBefore = [before1Y, before2Y];
   const parallaxAfter  = [after1Y,  after2Y];
 
   const projects = [
     {
-      num: "01",
+      num: '01',
       before: heroBeforeImg,
       after: heroAfterImg,
-      title: "Aspen Woods Reset",
-      loc: "Southwest Calgary",
-      service: "Full Garage Cleanout"
+      title: 'Aspen Woods Reset',
+      loc: 'Southwest Calgary',
+      service: 'Full Garage Cleanout',
     },
     {
-      num: "02",
-      before: "https://www.image2url.com/r2/default/images/1779113094140-19a1f514-3650-47f6-93d1-7425638cb1c4.png",
-      after: "https://www.image2url.com/r2/default/images/1779113099401-74683ad9-a22b-44ae-bbf2-625902ac214e.png",
-      title: "Estate Cleanout",
-      loc: "Mount Royal",
-      service: "Estate Cleanout + Haul"
-    }
+      num: '02',
+      before: 'https://www.image2url.com/r2/default/images/1779113094140-19a1f514-3650-47f6-93d1-7425638cb1c4.png',
+      after:  'https://www.image2url.com/r2/default/images/1779113099401-74683ad9-a22b-44ae-bbf2-625902ac214e.png',
+      title: 'Estate Cleanout',
+      loc: 'Mount Royal',
+      service: 'Estate Cleanout + Haul',
+    },
   ];
 
   return (
-    <section ref={sectionRef} id="gallery" className="relative py-16 md:py-32 bg-brand-navy md:bg-white overflow-hidden">
-      <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-brand-navy md:from-brand-soft to-transparent pointer-events-none" />
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20">
+    <section ref={sectionRef} id="gallery" className="relative bg-brand-navy overflow-hidden">
 
-        {/* Section header */}
+      {/* ── Section header ── */}
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20 pt-20 md:pt-32 pb-12 md:pb-20">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative mb-9 md:mb-20"
         >
-          <div className="text-brand-orange font-black uppercase text-[10px] tracking-[0.32em] sm:tracking-[0.4em] mb-3 sm:mb-4">Before &amp; After</div>
-          <h2 className="font-display text-[42px] sm:text-6xl md:text-7xl xl:text-[96px] font-black uppercase tracking-tighter leading-[0.9] text-white md:text-brand-navy">
+          <div className="text-brand-orange font-black uppercase text-[10px] tracking-[0.4em] mb-4">
+            Before &amp; After · Transformations
+          </div>
+          <h2 className="font-display font-black uppercase tracking-tighter leading-[0.88] text-white"
+            style={{ fontSize: 'clamp(42px, 8vw, 108px)' }}>
             Real Results.<br />
             <span className="text-brand-green">Real Calgary Homes.</span>
           </h2>
         </motion.div>
+      </div>
 
-        {/* Project cards */}
-        <div className="flex flex-col gap-8 md:gap-20">
-          {projects.map((proj, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, duration: 0.6 }}
-              className="relative p-0 sm:rounded-2xl sm:border sm:border-brand-navy/10 sm:bg-white sm:shadow-[0_16px_45px_rgba(4,27,77,0.18)]"
-            >
-              {/* Ghost project number */}
-              <span className="absolute -top-3 right-3 sm:left-0 sm:right-auto font-display text-[74px] sm:text-[100px] md:text-[160px] font-black text-white/[0.08] sm:text-brand-navy/[0.04] leading-none select-none pointer-events-none z-0">
-                {proj.num}
-              </span>
+      {/* ── Projects ── */}
+      {projects.map((proj, i) => (
+        <div key={i} className="relative">
 
-              {/* Before + After panels */}
-              <div className="relative z-10 grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-[3px] bg-transparent sm:bg-gray-200 rounded-xl sm:rounded-2xl overflow-visible sm:overflow-hidden sm:shadow-[0_8px_40px_rgba(4,27,77,0.10)]">
-                {/* BEFORE */}
-                <div className="relative overflow-hidden rounded-xl border border-white/10 shadow-lg shadow-black/25 sm:rounded-none sm:border-0 sm:shadow-none" style={{ aspectRatio: '4/3' }}>
-                  <motion.img
-                    src={proj.before}
-                    alt={`Before — ${proj.title}`}
-                    style={{ y: parallaxBefore[i] }}
-                    className="absolute inset-0 w-full h-[115%] -top-[7.5%] object-cover"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-brand-navy/25" />
-                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex items-center gap-1.5 bg-black/65 backdrop-blur-sm px-2.5 py-1.5 rounded-full">
-                    <div className="w-2 h-2 rounded-full bg-red-400 shrink-0" />
-                    <span className="text-white/90 text-[9px] sm:text-[10px] font-black uppercase tracking-widest">Before</span>
+          {/* Ghost project number */}
+          <span
+            className="pointer-events-none select-none absolute top-0 right-4 md:right-20 font-display font-black text-white/[0.035] leading-none z-0"
+            style={{ fontSize: 'clamp(110px, 20vw, 240px)' }}
+          >
+            {proj.num}
+          </span>
+
+          {/* Image pair */}
+          <motion.div
+            initial={{ opacity: 0, y: 36 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.75, delay: i * 0.08 }}
+            className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20"
+          >
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3">
+
+              {/* BEFORE */}
+              <div
+                className="relative overflow-hidden rounded-2xl shadow-[0_24px_64px_rgba(0,0,0,0.55)]"
+                style={{ aspectRatio: '4/3' }}
+              >
+                <motion.img
+                  src={proj.before}
+                  alt={`Before — ${proj.title}`}
+                  style={{ y: parallaxBefore[i] }}
+                  className="absolute inset-0 w-full h-[116%] -top-[8%] object-cover"
+                  referrerPolicy="no-referrer"
+                />
+                {/* Vignette layers */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-black/25 to-transparent" />
+                {/* Integrated label */}
+                <div className="absolute bottom-5 left-5 z-10">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-[3px] h-4 bg-brand-orange rounded-full shrink-0" />
+                    <span className="text-white font-black text-[10px] uppercase tracking-[0.32em]">Before</span>
                   </div>
-                </div>
-
-                <div className="relative z-20 -my-1 flex items-center justify-center sm:hidden">
-                  <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-brand-orange px-3 py-2 text-[9px] font-black uppercase tracking-widest text-white shadow-xl shadow-brand-orange/30">
-                    <span>Clear</span>
-                    <ArrowRight size={12} />
-                    <span>Reclaim</span>
-                  </div>
-                </div>
-
-                {/* AFTER */}
-                <div className="relative overflow-hidden rounded-xl border border-brand-green/30 shadow-lg shadow-brand-green/10 sm:rounded-none sm:border-0 sm:shadow-none group" style={{ aspectRatio: '4/3' }}>
-                  <motion.img
-                    src={proj.after}
-                    alt={`After — ${proj.title}`}
-                    style={{ y: parallaxAfter[i] }}
-                    className="absolute inset-0 w-full h-[115%] -top-[7.5%] object-cover transition-transform duration-700 group-hover:scale-105"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-brand-navy/5 group-hover:bg-transparent transition-colors duration-500" />
-                  <div className="absolute top-3 left-3 sm:top-4 sm:left-4 flex items-center gap-1.5 bg-brand-green backdrop-blur-sm px-2.5 py-1.5 rounded-full shadow-md">
-                    <div className="w-2 h-2 rounded-full bg-white shrink-0" />
-                    <span className="text-white text-[9px] sm:text-[10px] font-black uppercase tracking-widest">After</span>
-                  </div>
+                  <p className="text-white/50 text-[11px] font-medium pl-[11px]">{proj.loc}</p>
                 </div>
               </div>
 
-              {/* Project metadata */}
-              <div className="hidden sm:flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mt-4 px-1 sm:px-1">
-                <div>
-                  <p className="text-[10px] text-brand-orange font-black uppercase tracking-[0.24em] sm:tracking-[0.3em] mb-1 flex items-center gap-1.5">
-                    <MapPin size={10} /> {proj.loc}
-                  </p>
-                  <h3 className="font-display text-2xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight text-brand-navy leading-none">
-                    {proj.title}
-                  </h3>
+              {/* AFTER */}
+              <div
+                className="relative overflow-hidden rounded-2xl shadow-[0_24px_64px_rgba(0,0,0,0.55)] group"
+                style={{ aspectRatio: '4/3' }}
+              >
+                <motion.img
+                  src={proj.after}
+                  alt={`After — ${proj.title}`}
+                  style={{ y: parallaxAfter[i] }}
+                  className="absolute inset-0 w-full h-[116%] -top-[8%] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-br from-transparent to-brand-green/12" />
+                {/* Integrated label */}
+                <div className="absolute bottom-5 left-5 z-10">
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-[3px] h-4 bg-brand-green rounded-full shrink-0" />
+                    <span className="text-white font-black text-[10px] uppercase tracking-[0.32em]">After</span>
+                  </div>
+                  <p className="text-white/50 text-[11px] font-medium pl-[11px]">{proj.service}</p>
                 </div>
-                <span className="w-fit px-3 py-1.5 rounded-full bg-brand-soft text-brand-navy/55 text-[9px] sm:text-[10px] font-bold uppercase tracking-widest shrink-0 sm:ml-4">
-                  {proj.service}
-                </span>
+                {/* Subtle green ring for depth */}
+                <div className="absolute inset-0 ring-1 ring-inset ring-brand-green/18 rounded-2xl pointer-events-none" />
               </div>
+            </div>
+          </motion.div>
 
-              {/* Mobile plain-text metadata */}
-              <div className="sm:hidden mt-3">
-                <p className="text-[9px] text-brand-orange font-black uppercase tracking-widest flex items-center gap-1">
-                  <MapPin size={9} /> {proj.loc}
+          {/* Project meta */}
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: i * 0.08 + 0.18 }}
+            className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20 mt-6 mb-20 md:mb-28"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+              <div>
+                <p className="text-brand-orange font-black uppercase text-[10px] tracking-[0.38em] mb-2 flex items-center gap-1.5">
+                  <MapPin size={9} className="shrink-0" />
+                  {proj.loc} &nbsp;·&nbsp; Project {proj.num}
                 </p>
-                <h3 className="mt-0.5 font-display text-xl font-black uppercase tracking-tight text-white leading-none">
+                <h3
+                  className="font-display font-black uppercase tracking-tighter text-white leading-none"
+                  style={{ fontSize: 'clamp(28px, 4.5vw, 60px)' }}
+                >
                   {proj.title}
                 </h3>
-                <p className="mt-1 text-[10px] text-white/45 uppercase tracking-wide">{proj.service}</p>
               </div>
-            </motion.div>
-          ))}
-        </div>
+              <a
+                href="#contact"
+                className="shrink-0 flex items-center gap-2 text-white/30 hover:text-brand-orange transition-colors duration-300 text-[11px] font-black uppercase tracking-widest group/link"
+              >
+                Book Similar
+                <ArrowRight size={13} className="group-hover/link:translate-x-1 transition-transform duration-300" />
+              </a>
+            </div>
+          </motion.div>
 
-        {/* Minimal CTA */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
-          className="mt-16 md:mt-24 flex flex-col sm:flex-row items-center justify-between gap-6 py-8 border-t-2 border-white/15 md:border-brand-navy/8"
-        >
-          <p className="font-display text-2xl md:text-3xl font-black uppercase text-white md:text-brand-navy text-center sm:text-left leading-tight">
+          {/* Divider between projects */}
+          {i < projects.length - 1 && (
+            <div className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20 mb-20 md:mb-28">
+              <div className="h-px bg-white/8" />
+            </div>
+          )}
+        </div>
+      ))}
+
+      {/* ── CTA ── */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20 pb-20 md:pb-32"
+      >
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-6 py-10 border-t border-white/10">
+          <p className="font-display text-3xl md:text-4xl font-black uppercase text-white text-center sm:text-left leading-tight">
             Your garage could be{' '}
             <span className="text-brand-green">next.</span>
           </p>
@@ -1565,8 +1595,11 @@ const Gallery = () => {
           >
             Get Free Quote <ArrowRight size={16} />
           </a>
-        </motion.div>
-      </div>
+        </div>
+      </motion.div>
+
+      {/* Fade into next section */}
+      <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-b from-transparent to-white pointer-events-none" />
     </section>
   );
 };
