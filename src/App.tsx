@@ -288,10 +288,7 @@ const Hero = () => {
               transition={{ duration: 0.5 }}
               className="relative z-10 flex flex-wrap items-center gap-2 mb-3 sm:mb-8"
             >
-              <div className="inline-flex items-center gap-2 bg-brand-orange/15 text-brand-orange px-3 sm:px-4 py-1.5 sm:py-2 rounded-sm font-black text-[9px] sm:text-[10px] uppercase tracking-widest border border-brand-orange/30">
-                <span className="text-red-400 text-sm">🍁</span>
-                <span>100% Calgarian Owned</span>
-              </div>
+              <span className="text-red-500 text-5xl sm:text-6xl leading-none select-none drop-shadow-lg" aria-hidden="true">🍁</span>
               <div className="rotator-card hidden md:inline-flex">
                 <div className="rotator-loader">
                   <span>Target:</span>
