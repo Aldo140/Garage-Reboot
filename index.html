@@ -3,47 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Garage Reboot | Calgary Garage Cleanouts & Junk Removal</title>
-    <meta name="description" content="Calgary's top-rated garage cleanout & junk removal team. We serve Calgary, Okotoks, Airdrie, High River & Southern Alberta. Free quotes, fast turnaround, 5-star reviewed." />
-    <meta name="keywords" content="garage cleanout calgary, junk removal calgary, moving services calgary, estate cleanout alberta, garage organization calgary, okotoks junk removal, airdrie junk removal, southern alberta cleanout" />
+
+    <!-- Primary keyword first in title — higher CTR in search results -->
+    <title>Calgary Garage Cleanout & Junk Removal | Garage Reboot</title>
+    <meta name="description" content="Calgary's #1 garage cleanout & junk removal crew. Same-day service in SW, NW, SE & NE Calgary, Okotoks, Airdrie & High River. Free quote. 5-star rated. Book online 24/7." />
+
+    <!-- Robots: let Google use full snippets and large images -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+
+    <!-- Geo -->
+    <meta name="geo.region" content="CA-AB" />
+    <meta name="geo.placename" content="Calgary, Alberta" />
+    <meta name="geo.position" content="51.0447;-114.0719" />
+    <meta name="ICBM" content="51.0447, -114.0719" />
 
     <!-- Canonical -->
     <link rel="canonical" href="https://garagereboot.vercel.app/" />
 
+    <!-- Performance: preconnect to font & image CDNs -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
     <!-- Open Graph -->
-    <meta property="og:title" content="Garage Reboot | Calgary Garage Cleanouts & Junk Removal" />
-    <meta property="og:description" content="Calgary's top-rated garage cleanout & junk removal team. Free quotes, fast turnaround, 5-star reviewed." />
+    <meta property="og:title" content="Calgary Garage Cleanout & Junk Removal | Garage Reboot" />
+    <meta property="og:description" content="Calgary's #1 garage cleanout & junk removal crew. Same-day service, free quotes, 5-star rated. Serving SW, NW, SE & NE Calgary and Southern Alberta." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://garagereboot.vercel.app/" />
     <meta property="og:image" content="https://garagereboot.vercel.app/og-image.jpg" />
     <meta property="og:locale" content="en_CA" />
+    <meta property="og:site_name" content="Garage Reboot" />
 
-    <!-- Twitter Card -->
+    <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Garage Reboot | Calgary Garage Cleanouts & Junk Removal" />
-    <meta name="twitter:description" content="Calgary's top-rated garage cleanout & junk removal team. Free quotes, fast turnaround, 5-star reviewed." />
+    <meta name="twitter:title" content="Calgary Garage Cleanout & Junk Removal | Garage Reboot" />
+    <meta name="twitter:description" content="Calgary's #1 garage cleanout & junk removal crew. Same-day service, free quotes, 5-star rated." />
     <meta name="twitter:image" content="https://garagereboot.vercel.app/og-image.jpg" />
 
-    <!-- Geo targeting -->
-    <meta name="geo.region" content="CA-AB" />
-    <meta name="geo.placename" content="Calgary" />
-
-    <!-- LocalBusiness structured data -->
+    <!-- ══════════════════════════════════════════════════════════ -->
+    <!-- SCHEMA 1: LocalBusiness (CleaningService + MovingCompany) -->
+    <!-- ══════════════════════════════════════════════════════════ -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "LocalBusiness",
+      "@type": ["LocalBusiness", "HomeAndConstructionBusiness", "MovingCompany"],
+      "@id": "https://garagereboot.vercel.app/#business",
       "name": "Garage Reboot",
-      "description": "Calgary's top-rated garage cleanout, junk removal, and moving service. Serving Calgary, Okotoks, Airdrie, High River, and Southern Alberta.",
-      "url": "https://garagereboot.ca",
+      "alternateName": "Garage Reboot Calgary",
+      "description": "Calgary's top-rated garage cleanout, junk removal, estate cleanout, and moving service. 100% Calgarian owned. Serving SW, NW, SE and NE Calgary, Okotoks, Airdrie, High River, and Southern Alberta.",
+      "url": "https://garagereboot.vercel.app/",
       "telephone": "",
       "priceRange": "$$",
+      "currenciesAccepted": "CAD",
+      "paymentAccepted": "Cash, Credit Card, E-Transfer",
       "image": "https://garagereboot.vercel.app/og-image.jpg",
+      "logo": "https://garagereboot.vercel.app/favicon.svg",
+      "foundingDate": "2024",
       "address": {
         "@type": "PostalAddress",
         "streetAddress": "836 15 Ave SW #1207",
         "addressLocality": "Calgary",
         "addressRegion": "AB",
+        "postalCode": "T2R 0A1",
         "addressCountry": "CA"
       },
       "geo": {
@@ -56,21 +76,227 @@
         { "@type": "City", "name": "Okotoks" },
         { "@type": "City", "name": "Airdrie" },
         { "@type": "City", "name": "High River" },
-        { "@type": "City", "name": "Lethbridge" }
+        { "@type": "City", "name": "Lethbridge" },
+        { "@type": "City", "name": "Cochrane" },
+        { "@type": "City", "name": "Chestermere" },
+        { "@type": "AdministrativeArea", "name": "SW Calgary" },
+        { "@type": "AdministrativeArea", "name": "NW Calgary" },
+        { "@type": "AdministrativeArea", "name": "SE Calgary" },
+        { "@type": "AdministrativeArea", "name": "NE Calgary" },
+        { "@type": "AdministrativeArea", "name": "Aspen Woods" },
+        { "@type": "AdministrativeArea", "name": "Signal Hill" },
+        { "@type": "AdministrativeArea", "name": "West Springs" },
+        { "@type": "AdministrativeArea", "name": "Beltline" },
+        { "@type": "AdministrativeArea", "name": "Mount Royal" },
+        { "@type": "AdministrativeArea", "name": "Tuscany" },
+        { "@type": "AdministrativeArea", "name": "Panorama Hills" },
+        { "@type": "AdministrativeArea", "name": "Auburn Bay" },
+        { "@type": "AdministrativeArea", "name": "McKenzie Towne" }
       ],
-      "openingHoursSpecification": {
-        "@type": "OpeningHoursSpecification",
-        "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-        "opens": "07:00",
-        "closes": "20:00"
-      },
+      "openingHoursSpecification": [
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
+          "opens": "07:00",
+          "closes": "20:00"
+        },
+        {
+          "@type": "OpeningHoursSpecification",
+          "dayOfWeek": "Sunday",
+          "opens": "09:00",
+          "closes": "17:00"
+        }
+      ],
       "aggregateRating": {
         "@type": "AggregateRating",
-        "ratingValue": "5",
-        "reviewCount": "120"
+        "ratingValue": "5.0",
+        "reviewCount": "120",
+        "bestRating": "5",
+        "worstRating": "1"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Garage Reboot Services",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Mini Junk Load",
+              "description": "A few bags or small items. Quick in, quick out."
+            },
+            "price": "80",
+            "priceCurrency": "CAD"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Quarter Truck Junk Removal",
+              "description": "A sofa, appliance, or a corner of the garage. Dump fees included."
+            },
+            "price": "150",
+            "priceCurrency": "CAD"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Half Truck Garage Cleanout",
+              "description": "Standard garage cleanout. Most common choice. Dump fees included, 2 crew members, final sweep."
+            },
+            "price": "250",
+            "priceCurrency": "CAD"
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Full Truck Estate Cleanout",
+              "description": "Total transformation. Full estate or garage cleanout. 2-3 crew members."
+            },
+            "price": "400",
+            "priceCurrency": "CAD"
+          }
+        ]
       },
       "sameAs": [
         "https://www.facebook.com/profile.php?id=61589686545956"
+      ]
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════ -->
+    <!-- SCHEMA 2: FAQPage — rich snippets  -->
+    <!-- ═══════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What's included in the price for junk removal in Calgary?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Junk & Haul includes labor, truck, dump fees, and equipment. Labor Only includes crew time and equipment — you handle disposal. Moving includes truck, labor, protective blankets and straps. There are no surprise charges."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Can I hire just the muscle for a cleanout without disposal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Absolutely — that's exactly what our 'Just the Muscle' packages are for. You handle where things go (donation, bin rental, family pickup), and we provide a 2-person crew for 2, 4, or 8 hours. Starting from $120."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How do I know which load size I need for a garage cleanout?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most garages with standard clutter are a half-truck load ($250–$350). A single sofa or appliance is a quarter load ($150–$200). Send us a photo over text and we'll give you an honest estimate — zero upsell."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you remove large appliances like fridges, stoves, and hot tubs in Calgary?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. Appliances are included in all Junk & Haul tiers. Hot tubs may require an add-on due to disassembly — just mention it when booking and we'll quote it upfront. We serve all Calgary neighbourhoods."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the minimum charge for junk removal?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Our minimum job is $80 (mini load). Labor-only bookings start at 2 hours ($120–$160). There is no charge for a quote."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need to sort or bag items before the crew arrives?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Nope. We sort on-site — just point us to what goes and we'll handle the rest. If you want to keep anything specific, flag it and we won't touch it."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How far ahead do I need to book a garage cleanout in Calgary?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Same-day bookings are available when crew is free (call for fastest response). Online scheduling is open 24/7 — most jobs confirm within a few hours."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do you recycle or donate items from a cleanout?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. We go to donation centres first whenever items are in good condition. Recyclables go to proper facilities. The landfill is always our last resort."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════ -->
+    <!-- SCHEMA 3: HowTo — process steps rich result   -->
+    <!-- ═══════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "HowTo",
+      "name": "How to Book a Garage Cleanout in Calgary",
+      "description": "Book a garage cleanout or junk removal in 3 simple steps with Garage Reboot Calgary.",
+      "totalTime": "PT2H",
+      "estimatedCost": {
+        "@type": "MonetaryAmount",
+        "currency": "CAD",
+        "value": "80"
+      },
+      "step": [
+        {
+          "@type": "HowToStep",
+          "position": "1",
+          "name": "Get an Instant Quote",
+          "text": "Send us a photo of your garage or space, or book a free on-site estimate. No pressure, just transparent pricing with no hidden fees.",
+          "url": "https://garagereboot.vercel.app/#contact"
+        },
+        {
+          "@type": "HowToStep",
+          "position": "2",
+          "name": "We Do the Rapid Reboot",
+          "text": "Our uniformed Calgary crew arrives on schedule and clears the clutter. We do all the heavy lifting, sorting, and loading so you don't have to.",
+          "url": "https://garagereboot.vercel.app/#services"
+        },
+        {
+          "@type": "HowToStep",
+          "position": "3",
+          "name": "Park Your Car Again",
+          "text": "Enjoy your fully reclaimed space. We handle responsible disposal, recycling, and donation drop-offs. Final sweep included.",
+          "url": "https://garagereboot.vercel.app/#gallery"
+        }
+      ]
+    }
+    </script>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SCHEMA 4: BreadcrumbList — site structure signal      -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",         "item": "https://garagereboot.vercel.app/" },
+        { "@type": "ListItem", "position": 2, "name": "Services",     "item": "https://garagereboot.vercel.app/#services" },
+        { "@type": "ListItem", "position": 3, "name": "Pricing",      "item": "https://garagereboot.vercel.app/#pricing" },
+        { "@type": "ListItem", "position": 4, "name": "Gallery",      "item": "https://garagereboot.vercel.app/#gallery" },
+        { "@type": "ListItem", "position": 5, "name": "Service Area", "item": "https://garagereboot.vercel.app/#area" },
+        { "@type": "ListItem", "position": 6, "name": "Contact",      "item": "https://garagereboot.vercel.app/#contact" }
       ]
     }
     </script>
@@ -80,6 +306,42 @@
   </head>
   <body>
     <div id="root"></div>
+
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <!-- Noscript: keyword-rich fallback — visible to Google wave-1   -->
+    <!-- crawl before JS renders, invisible to JS users               -->
+    <!-- ══════════════════════════════════════════════════════════════ -->
+    <noscript>
+      <main>
+        <h1>Calgary Garage Cleanout & Junk Removal — Garage Reboot</h1>
+        <p>Garage Reboot is Calgary's top-rated garage cleanout, junk removal, estate cleanout, and moving service. 100% Calgarian owned and operated. We serve SW Calgary, NW Calgary, SE Calgary, NE Calgary, Okotoks, Airdrie, High River, Lethbridge, Cochrane, and all of Southern Alberta.</p>
+
+        <h2>Our Services</h2>
+        <ul>
+          <li>Garage Cleanouts Calgary — from $80</li>
+          <li>Junk Removal Calgary — same-day available</li>
+          <li>Estate Cleanouts Calgary — full property clear-out</li>
+          <li>Student Moving Calgary — semester transitions</li>
+          <li>Full Moving Service Calgary — packing to delivery</li>
+          <li>Commercial Cleanouts Calgary — office and retail</li>
+        </ul>
+
+        <h2>Neighbourhoods We Serve</h2>
+        <p>Aspen Woods, Signal Hill, West Springs, Discovery Ridge, Springbank Hill, Beltline, Mount Royal, Marda Loop, Killarney, Altadore, Varsity, Dalhousie, Tuscany, Sage Hill, Evanston, Panorama Hills, Country Hills, Auburn Bay, McKenzie Towne, Chaparral, Mahogany, Silverado, Cranston, Somerset, Shawnessy, Coventry Hills, Harvest Hills, Nolan Hill, Kincora, Okotoks, Airdrie, High River.</p>
+
+        <h2>Why Choose Garage Reboot Calgary</h2>
+        <ul>
+          <li>5-star Google rated — 120+ Calgary families served</li>
+          <li>Free quotes — no pressure, transparent pricing</li>
+          <li>Same-day service available</li>
+          <li>We recycle and donate before landfilling</li>
+          <li>Fully insured crew in Garage Reboot uniform</li>
+        </ul>
+
+        <p>Book your free Calgary garage cleanout quote today. Call or fill out the form on this page. We typically confirm within a few hours.</p>
+      </main>
+    </noscript>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>
