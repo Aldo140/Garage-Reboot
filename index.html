@@ -301,6 +301,79 @@
     }
     </script>
 
+    <!-- ══════════════════════════════════════════════════ -->
+    <!-- SCHEMA 5: WebSite + Speakable (AI / voice search) -->
+    <!-- ══════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "@id": "https://garagereboot.vercel.app/#website",
+      "name": "Garage Reboot",
+      "url": "https://garagereboot.vercel.app/",
+      "description": "Calgary's top-rated garage cleanout, junk removal, and moving service. 100% Calgarian owned. Free quotes. Same-day available.",
+      "inLanguage": "en-CA",
+      "about": {
+        "@id": "https://garagereboot.vercel.app/#business"
+      },
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "xpath": [
+          "/html/head/title",
+          "/html/head/meta[@name='description']/@content"
+        ]
+      }
+    }
+    </script>
+
+    <!-- ══════════════════════════════════════════════════════ -->
+    <!-- SCHEMA 6: Individual Service pages for AI entity map  -->
+    <!-- ══════════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    [
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Garage Cleanout Calgary",
+        "serviceType": "Garage Cleanout",
+        "provider": { "@id": "https://garagereboot.vercel.app/#business" },
+        "areaServed": { "@type": "City", "name": "Calgary" },
+        "description": "Professional garage cleanout service in Calgary. We remove all junk, do the heavy lifting, and leave your garage completely empty and swept. Prices from $250.",
+        "offers": { "@type": "Offer", "price": "250", "priceCurrency": "CAD" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Junk Removal Calgary",
+        "serviceType": "Junk Removal",
+        "provider": { "@id": "https://garagereboot.vercel.app/#business" },
+        "areaServed": { "@type": "City", "name": "Calgary" },
+        "description": "Same-day junk removal in Calgary. We remove appliances, furniture, yard waste, and general clutter. Dump fees included. Prices from $80.",
+        "offers": { "@type": "Offer", "price": "80", "priceCurrency": "CAD" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Estate Cleanout Calgary",
+        "serviceType": "Estate Cleanout",
+        "provider": { "@id": "https://garagereboot.vercel.app/#business" },
+        "areaServed": { "@type": "City", "name": "Calgary" },
+        "description": "Full estate cleanout service in Calgary handled with care and dignity. We clear entire properties — garages, basements, storage rooms, and more. Prices from $400.",
+        "offers": { "@type": "Offer", "price": "400", "priceCurrency": "CAD" }
+      },
+      {
+        "@context": "https://schema.org",
+        "@type": "Service",
+        "name": "Moving Service Calgary",
+        "serviceType": "Moving Service",
+        "provider": { "@id": "https://garagereboot.vercel.app/#business" },
+        "areaServed": { "@type": "City", "name": "Calgary" },
+        "description": "Local moving service in Calgary for students, renters, and homeowners. Quick moves from $200, full home moves from $400. Truck, blankets, and straps included.",
+        "offers": { "@type": "Offer", "price": "200", "priceCurrency": "CAD" }
+      }
+    ]
+    </script>
+
     <meta name="google-site-verification" content="NN8jnP7ilo_Ou6FJYJ0_H_GUdD1QFQ_0Ju_GDWSSxoE" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
