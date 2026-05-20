@@ -1370,11 +1370,11 @@ const ServiceArea = () => {
           <div>
             <p className="text-brand-navy/70 font-black text-[10px] uppercase tracking-[0.4em] mb-2">Direct Line to Dispatch</p>
             <a
-              href="tel:2904857668"
+              href="tel:5872290648"
               className="font-display font-black tracking-tighter text-white block hover:opacity-85 transition-opacity"
               style={{ fontSize: 'clamp(36px, 6vw, 80px)' }}
             >
-              (290) 485-7668
+              (587) 229-0648
             </a>
           </div>
           <a
