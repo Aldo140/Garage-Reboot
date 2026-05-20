@@ -4,7 +4,9 @@
  */
 
 import React, { useState, useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'motion/react';
+import { TOWNS, CORRIDOR_LABELS, driveLabel, type Corridor } from './towns';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
 import type { Group } from 'three';
@@ -1033,19 +1035,21 @@ const Pricing = () => {
   );
 };
 
+const CORRIDOR_ORDER: Corridor[] = ['north', 'south', 'east', 'northeast', 'west', 'foothills'];
+
 const ServiceArea = () => {
   const areas = [
-    { name: 'Calgary', sub: 'All 8 Quadrants', eta: 'Home base', tone: 'hub', position: 'left-[50%] top-[50%]' },
-    { name: 'Airdrie & Cochrane', sub: 'North Corridor', eta: '30-45 min', tone: 'north', position: 'left-[48%] top-[25%]' },
-    { name: 'Okotoks & High River', sub: 'South Foothills', eta: '35-55 min', tone: 'south', position: 'left-[55%] top-[72%]' },
-    { name: 'Banff & Canmore', sub: 'Rocky Mountains', eta: 'By route', tone: 'west', position: 'left-[23%] top-[43%]' },
-    { name: 'Brooks & Lethbridge', sub: 'Eastern Prairies', eta: 'By route', tone: 'east', position: 'left-[78%] top-[58%]' },
-    { name: 'Rural Alberta', sub: 'By Request', eta: 'Scheduled', tone: 'rural', position: 'left-[71%] top-[31%]' },
+    { name: 'Calgary', sub: 'All 8 Quadrants', eta: 'Home base', tone: 'hub' },
+    { name: 'Airdrie & Cochrane', sub: 'North Corridor', eta: '30-45 min', tone: 'north' },
+    { name: 'Okotoks & High River', sub: 'South Foothills', eta: '35-55 min', tone: 'south' },
+    { name: 'Banff & Canmore', sub: 'Rocky Mountains', eta: 'By route', tone: 'west' },
+    { name: 'Brooks & Lethbridge', sub: 'Eastern Prairies', eta: 'By route', tone: 'east' },
+    { name: 'Rural Alberta', sub: 'By Request', eta: 'Scheduled', tone: 'rural' },
   ];
 
   const stats = [
     { val: '3hr', label: 'Drive Radius' },
-    { val: '6+', label: 'Communities' },
+    { val: '47+', label: 'Communities' },
     { val: '<1hr', label: 'Response' },
     { val: '5.0', label: 'Google Rated' },
   ];
@@ -1240,6 +1244,44 @@ const ServiceArea = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Town grid — Option B: visible SEO grid of all 47 communities */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.1 }}
+        className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20 pb-14"
+      >
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-navy/40 mb-6">
+          All Communities We Serve — Southern Alberta
+        </p>
+        <div className="space-y-6">
+          {CORRIDOR_ORDER.map((corridor) => {
+            const towns = TOWNS.filter((t) => t.corridor === corridor);
+            return (
+              <div key={corridor}>
+                <p className="text-[9px] font-black uppercase tracking-widest text-brand-orange mb-2">
+                  {CORRIDOR_LABELS[corridor]}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {towns.map((town) => (
+                    <Link
+                      key={town.slug}
+                      to={`/${town.slug}`}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-navy/10 bg-white px-3 py-1.5 text-[11px] font-bold text-brand-navy hover:border-brand-orange hover:text-brand-orange transition-colors shadow-sm"
+                    >
+                      <span className="h-1 w-1 rounded-full bg-brand-green shrink-0" />
+                      {town.name}
+                      <span className="text-brand-navy/30 font-medium">{driveLabel(town.driveMin)}</span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </motion.div>
 
       <motion.div
         initial={{ opacity: 0, y: 30 }}
