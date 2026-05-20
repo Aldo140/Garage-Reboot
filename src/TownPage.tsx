@@ -1,8 +1,17 @@
 import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MapPin, Truck, Star, ArrowRight, Check, Phone } from 'lucide-react';
-import { TOWNS, SERVICES, driveLabel } from './towns';
+import { TOWNS, SERVICES, driveLabel, type Corridor } from './towns';
 import { Analytics } from './analytics';
+
+const CORRIDOR_CONTEXT: Record<Corridor, { route: string; note: string }> = {
+  north:     { route: 'Hwy 2 North (QEII Highway)', note: 'One of our most active corridors — same-day service is often available for communities within an hour of Calgary.' },
+  south:     { route: 'Hwy 2 South', note: 'We run Hwy 2 South regularly. Quick turnaround for Okotoks, High River, and all communities on this route.' },
+  east:      { route: 'TransCanada Hwy 1 East', note: 'We cover the TransCanada East corridor for same-day and scheduled jobs. Great for Chestermere, Strathmore, and beyond.' },
+  northeast: { route: 'Drumheller / Three Hills Corridor', note: 'Scheduled runs on this corridor — call ahead to confirm same-day availability. Great for larger estate or rural property cleanouts.' },
+  west:      { route: 'Hwy 1 / 1A — Rocky Mountain Corridor', note: 'Mountain and foothills communities served on scheduled runs. Ideal for post-renovation or vacation property cleanouts in Canmore and Banff.' },
+  foothills: { route: 'Foothills & Southwest Alberta', note: 'Close to Calgary — frequent same-day availability. Perfect for acreage cleanouts and rural property clear-outs in the Foothills.' },
+};
 
 const SERVICES_DETAIL = [
   {
@@ -198,6 +207,26 @@ export default function TownPage() {
           >
             Book Free Quote <ArrowRight size={16} />
           </a>
+        </div>
+      </section>
+
+      {/* Corridor context — unique per corridor, differentiates town pages */}
+      <section className="py-10 px-4 bg-brand-soft border-t border-brand-navy/10">
+        <div className="max-w-4xl mx-auto flex items-start gap-4">
+          <div className="flex-none w-9 h-9 bg-brand-navy rounded-lg flex items-center justify-center shrink-0 mt-0.5">
+            <Truck size={16} className="text-brand-orange" />
+          </div>
+          <div>
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-navy/40 mb-1">
+              Route to {town.name}
+            </p>
+            <p className="text-sm font-black text-brand-navy">
+              {CORRIDOR_CONTEXT[town.corridor].route} · {town.km} km from Calgary
+            </p>
+            <p className="text-sm text-brand-navy/60 mt-1 leading-relaxed">
+              {CORRIDOR_CONTEXT[town.corridor].note}
+            </p>
+          </div>
         </div>
       </section>
 
