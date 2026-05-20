@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { MapPin, Truck, Star, ArrowRight, Check, Phone } from 'lucide-react';
 import { TOWNS, SERVICES, driveLabel } from './towns';
+import { Analytics } from './analytics';
 
 const SERVICES_DETAIL = [
   {
@@ -32,6 +33,7 @@ export default function TownPage() {
 
   useEffect(() => {
     if (town) {
+      Analytics.townPageView(town.name);
       document.title = `${town.name} Garage Cleanout & Junk Removal | Garage Reboot`;
       const metaDesc = document.querySelector('meta[name="description"]');
       if (metaDesc) {

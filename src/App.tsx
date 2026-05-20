@@ -7,6 +7,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'motion/react';
 import { TOWNS, CORRIDOR_LABELS, driveLabel, type Corridor } from './towns';
+import { Analytics } from './analytics';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { Float } from '@react-three/drei';
 import type { Group } from 'three';
@@ -186,15 +187,32 @@ const Hero = () => {
     return () => clearInterval(t);
   }, []);
 
-  // Global cursor tracking + body cursor:none
+  // Global cursor tracking + body cursor:none + panel reveal detection
   useEffect(() => {
     const prev = document.body.style.cursor;
     document.body.style.cursor = 'none';
+    let wasOver = false;
     const onMove = (e: MouseEvent) => {
       setCursorPos({ x: e.clientX, y: e.clientY });
       setCursorVisible(true);
+      if (revealPanelRef.current) {
+        const rect = revealPanelRef.current.getBoundingClientRect();
+        const inPanel =
+          e.clientX >= rect.left && e.clientX <= rect.right &&
+          e.clientY >= rect.top  && e.clientY <= rect.bottom;
+        setIsOverPanel(inPanel);
+        if (inPanel) {
+          setRevealPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+          if (!wasOver) Analytics.revealHover();
+        }
+        wasOver = inPanel;
+      }
     };
-    const onLeave = () => setCursorVisible(false);
+    const onLeave = () => {
+      setCursorVisible(false);
+      setIsOverPanel(false);
+      wasOver = false;
+    };
     document.addEventListener('mousemove', onMove);
     document.addEventListener('mouseleave', onLeave);
     return () => {
@@ -203,12 +221,6 @@ const Hero = () => {
       document.removeEventListener('mouseleave', onLeave);
     };
   }, []);
-
-  const handlePanelMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!revealPanelRef.current) return;
-    const rect = revealPanelRef.current.getBoundingClientRect();
-    setRevealPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-  };
 
   return (
     <section ref={heroRef} className="relative bg-brand-navy overflow-hidden">
@@ -293,10 +305,6 @@ const Hero = () => {
       <div
         ref={revealPanelRef}
         className="hidden md:block absolute inset-y-0 right-0 w-[52%] overflow-hidden"
-        style={{ cursor: 'none' }}
-        onMouseMove={handlePanelMouseMove}
-        onMouseEnter={() => setIsOverPanel(true)}
-        onMouseLeave={() => setIsOverPanel(false)}
       >
         {/* Before — always fully visible base layer */}
         <motion.img
@@ -443,6 +451,7 @@ const Hero = () => {
             >
               <a
                 href="#contact"
+                onClick={() => Analytics.bookCTA('hero')}
                 className="bg-brand-orange text-white px-4 sm:px-10 py-3.5 sm:py-5 rounded-xl font-black text-sm sm:text-lg uppercase tracking-wider hover:brightness-110 active:scale-95 transition-all shadow-2xl shadow-brand-orange/30 text-center"
               >
                 Book Now
@@ -498,6 +507,7 @@ const Hero = () => {
                 href="https://g.page/r/CerXP-LQnaV0EAI/review"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => Analytics.reviewClick()}
                 className="flex min-h-[70px] items-center rounded-xl border border-white/10 bg-white/[0.045] p-3 sm:min-h-0 sm:border-0 sm:bg-transparent sm:p-0 shrink-0 hover:opacity-80 transition-opacity"
               >
                 <div className="flex flex-col gap-0.5">
@@ -1470,6 +1480,7 @@ const ServiceArea = () => {
             <p className="text-brand-navy/70 font-black text-[10px] uppercase tracking-[0.4em] mb-2">Direct Line to Dispatch</p>
             <a
               href="tel:5872290648"
+              onClick={() => Analytics.phoneClick()}
               className="font-display font-black tracking-tighter text-white block hover:opacity-85 transition-opacity"
               style={{ fontSize: 'clamp(36px, 6vw, 80px)' }}
             >
@@ -1519,6 +1530,7 @@ const ContactForm = () => {
       });
       const data = await res.json();
       if (data.success) {
+        Analytics.formSubmit(form.service);
         setStatus('success');
         setForm({ name: '', email: '', phone: '', service: '', details: '' });
       } else {

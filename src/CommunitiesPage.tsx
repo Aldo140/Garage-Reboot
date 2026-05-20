@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'motion/react';
 import { ArrowRight, MapPin, Truck, ArrowLeft, ChevronRight } from 'lucide-react';
 import { TOWNS, CORRIDOR_LABELS, driveLabel, type Corridor } from './towns';
+import { Analytics } from './analytics';
 
 const CORRIDOR_ORDER: Corridor[] = ['north', 'south', 'east', 'northeast', 'west', 'foothills'];
 
@@ -35,6 +36,8 @@ function DriveBar({ min }: { min: number }) {
 
 export default function CommunitiesPage() {
   const [activeFilter, setActiveFilter] = useState<Corridor | 'all'>('all');
+
+  useEffect(() => { Analytics.communitiesView(); }, []);
 
   const visibleCorridors = activeFilter === 'all'
     ? CORRIDOR_ORDER
