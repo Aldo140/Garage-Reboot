@@ -163,24 +163,94 @@ const Navbar = () => {
 };
 
 const HERO_SLIDES = [heroBeforeImg, heroAfterImg, extra1Img, extra2Img, extra3Img];
+const REVEAL_RADIUS = 140;
 
 const Hero = () => {
   const heroRef = useRef<HTMLElement>(null);
+  const revealPanelRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const imgY = useTransform(scrollYProgress, [0, 1], ['0%', '18%']);
   const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.6], ['0%', '-8%']);
-  const beforeOpacity = useTransform(scrollYProgress, [0.08, 0.22], [1, 0]);
-  const afterOpacity  = useTransform(scrollYProgress, [0.08, 0.22], [0, 1]);
 
+  // Cursor state
+  const [cursorPos, setCursorPos] = useState({ x: -300, y: -300 });
+  const [revealPos, setRevealPos] = useState({ x: 0, y: 0 });
+  const [isOverPanel, setIsOverPanel] = useState(false);
+  const [cursorVisible, setCursorVisible] = useState(false);
+
+  // Mobile slideshow
   const [slideIdx, setSlideIdx] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setSlideIdx(i => (i + 1) % HERO_SLIDES.length), 3600);
     return () => clearInterval(t);
   }, []);
 
+  // Global cursor tracking + body cursor:none
+  useEffect(() => {
+    const prev = document.body.style.cursor;
+    document.body.style.cursor = 'none';
+    const onMove = (e: MouseEvent) => {
+      setCursorPos({ x: e.clientX, y: e.clientY });
+      setCursorVisible(true);
+    };
+    const onLeave = () => setCursorVisible(false);
+    document.addEventListener('mousemove', onMove);
+    document.addEventListener('mouseleave', onLeave);
+    return () => {
+      document.body.style.cursor = prev;
+      document.removeEventListener('mousemove', onMove);
+      document.removeEventListener('mouseleave', onLeave);
+    };
+  }, []);
+
+  const handlePanelMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!revealPanelRef.current) return;
+    const rect = revealPanelRef.current.getBoundingClientRect();
+    setRevealPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+  };
+
   return (
     <section ref={heroRef} className="relative bg-brand-navy overflow-hidden">
+
+      {/* ── Global custom cursor ── */}
+      <div
+        className="fixed pointer-events-none z-[9999]"
+        style={{ left: cursorPos.x, top: cursorPos.y, opacity: cursorVisible ? 1 : 0, transition: 'opacity 0.15s' }}
+      >
+        {/* Expanding ring */}
+        <div style={{
+          position: 'absolute',
+          borderRadius: '50%',
+          border: `2px solid ${isOverPanel ? 'rgba(255,106,0,0.8)' : 'rgba(255,255,255,0.55)'}`,
+          width: isOverPanel ? REVEAL_RADIUS * 2 : 34,
+          height: isOverPanel ? REVEAL_RADIUS * 2 : 34,
+          left: isOverPanel ? -REVEAL_RADIUS : -17,
+          top: isOverPanel ? -REVEAL_RADIUS : -17,
+          boxShadow: isOverPanel ? '0 0 30px rgba(255,106,0,0.22), inset 0 0 30px rgba(255,106,0,0.06)' : 'none',
+          transition: 'width 0.38s cubic-bezier(0.16,1,0.3,1), height 0.38s cubic-bezier(0.16,1,0.3,1), left 0.38s cubic-bezier(0.16,1,0.3,1), top 0.38s cubic-bezier(0.16,1,0.3,1), border-color 0.2s',
+        }} />
+        {/* Center dot */}
+        <div style={{
+          position: 'absolute',
+          width: 5, height: 5, left: -2.5, top: -2.5,
+          borderRadius: '50%',
+          background: isOverPanel ? '#FF6A00' : '#fff',
+          transition: 'background 0.2s',
+        }} />
+        {/* PEEK label — only when over panel */}
+        {isOverPanel && (
+          <div style={{
+            position: 'absolute', left: 10, top: -8,
+            fontFamily: 'Oswald, sans-serif', fontWeight: 900,
+            fontSize: 9, letterSpacing: '0.3em',
+            textTransform: 'uppercase', color: '#FF6A00',
+            whiteSpace: 'nowrap',
+          }}>
+            Peek
+          </div>
+        )}
+      </div>
 
       {/* ── MOBILE: auto-slideshow ── */}
       <div className="md:hidden mt-20">
@@ -219,41 +289,62 @@ const Hero = () => {
         </div>
       </div>
 
-      {/* ── DESKTOP: right image panel — before → after crossfade on scroll ── */}
-      <div className="hidden md:block absolute inset-y-0 right-0 w-[52%] overflow-hidden">
-        {/* Before */}
+      {/* ── DESKTOP: right image panel — circular cursor reveal ── */}
+      <div
+        ref={revealPanelRef}
+        className="hidden md:block absolute inset-y-0 right-0 w-[52%] overflow-hidden"
+        style={{ cursor: 'none' }}
+        onMouseMove={handlePanelMouseMove}
+        onMouseEnter={() => setIsOverPanel(true)}
+        onMouseLeave={() => setIsOverPanel(false)}
+      >
+        {/* Before — always fully visible base layer */}
         <motion.img
           src={heroBeforeImg}
           alt="Calgary Garage Before — Aspen Woods"
-          style={{ y: imgY, opacity: beforeOpacity }}
+          style={{ y: imgY }}
           className="absolute inset-0 w-full h-[115%] object-cover"
           referrerPolicy="no-referrer"
         />
-        {/* After */}
-        <motion.img
-          src={heroAfterImg}
-          alt="Calgary Garage After — Aspen Woods"
-          style={{ y: imgY, opacity: afterOpacity }}
-          className="absolute inset-0 w-full h-[115%] object-cover"
-          referrerPolicy="no-referrer"
-        />
-        {/* "Before" badge — fades out as image transitions */}
-        <motion.div
-          style={{ opacity: beforeOpacity }}
-          className="absolute top-6 left-6 z-10 flex items-center gap-1.5 bg-brand-orange/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg"
+
+        {/* After — revealed only inside the cursor circle */}
+        <div
+          className="absolute inset-0"
+          style={{
+            clipPath: `circle(${isOverPanel ? REVEAL_RADIUS : 0}px at ${revealPos.x}px ${revealPos.y}px)`,
+            transition: `clip-path ${isOverPanel ? '0.12s ease-out' : '0.38s ease-in'}`,
+          }}
         >
+          <motion.img
+            src={heroAfterImg}
+            alt="Calgary Garage After — Aspen Woods"
+            style={{ y: imgY }}
+            className="absolute inset-0 w-full h-[115%] object-cover"
+            referrerPolicy="no-referrer"
+          />
+          {/* After badge — also clipped inside the circle */}
+          <div className="absolute top-6 left-6 z-10 flex items-center gap-1.5 bg-brand-green/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg">
+            <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse shrink-0" />
+            <span className="text-white text-[10px] font-black uppercase tracking-widest">After</span>
+          </div>
+        </div>
+
+        {/* Before badge */}
+        <div className="absolute top-6 left-6 z-10 flex items-center gap-1.5 bg-brand-orange/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg pointer-events-none">
           <div className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
           <span className="text-white text-[10px] font-black uppercase tracking-widest">Before</span>
-        </motion.div>
-        {/* "After" badge — fades in with the after image */}
-        <motion.div
-          style={{ opacity: afterOpacity }}
-          className="absolute top-6 left-6 z-10 flex items-center gap-1.5 bg-brand-green/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg"
+        </div>
+
+        {/* Hover hint — fades out once user hovers */}
+        <div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-black/40 backdrop-blur-sm border border-white/15 px-4 py-2 rounded-full pointer-events-none transition-opacity duration-500"
+          style={{ opacity: isOverPanel ? 0 : 1 }}
         >
-          <div className="w-1.5 h-1.5 rounded-full bg-white shrink-0" />
-          <span className="text-white text-[10px] font-black uppercase tracking-widest">After</span>
-        </motion.div>
-        <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/80 via-brand-navy/20 to-transparent" />
+          <div className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
+          <span className="text-white text-[10px] font-black uppercase tracking-[0.28em]">Hover to reveal</span>
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-r from-brand-navy/80 via-brand-navy/20 to-transparent pointer-events-none" />
       </div>
 
       {/* ── DESKTOP: navy diagonal panel ── */}
@@ -364,16 +455,16 @@ const Hero = () => {
               </a>
             </motion.div>
 
-            {/* Pre / Post state label — desktop only, crossfades with scroll */}
+            {/* Pre / Post state label — crossfades with cursor hover */}
             <div className="hidden md:block relative h-6 mb-8">
-              <motion.div style={{ opacity: beforeOpacity }} className="absolute inset-0 flex items-center gap-2.5">
+              <div className="absolute inset-0 flex items-center gap-2.5 transition-opacity duration-300" style={{ opacity: isOverPanel ? 0 : 1 }}>
                 <div className="w-[3px] h-5 bg-brand-orange rounded-full shrink-0" />
                 <span className="text-brand-orange font-black text-[10px] uppercase tracking-[0.32em]">Pre Garage Reboot</span>
-              </motion.div>
-              <motion.div style={{ opacity: afterOpacity }} className="absolute inset-0 flex items-center gap-2.5">
+              </div>
+              <div className="absolute inset-0 flex items-center gap-2.5 transition-opacity duration-300" style={{ opacity: isOverPanel ? 1 : 0 }}>
                 <div className="w-[3px] h-5 bg-brand-green rounded-full shrink-0" />
                 <span className="text-brand-green font-black text-[10px] uppercase tracking-[0.32em]">Post Garage Reboot ✓</span>
-              </motion.div>
+              </div>
             </div>
 
             {/* Social proof — compact mobile cards, full row on larger screens */}
