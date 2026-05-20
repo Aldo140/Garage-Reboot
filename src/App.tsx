@@ -1245,41 +1245,111 @@ const ServiceArea = () => {
         </div>
       </div>
 
-      {/* Town grid — Option B: visible SEO grid of all 47 communities */}
+      {/* Communities teaser — links to /communities full directory */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.5, delay: 0.1 }}
-        className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20 pb-14"
+        transition={{ duration: 0.55, delay: 0.1 }}
+        className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20 pb-16"
       >
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-brand-navy/40 mb-6">
-          All Communities We Serve — Southern Alberta
-        </p>
-        <div className="space-y-6">
-          {CORRIDOR_ORDER.map((corridor) => {
-            const towns = TOWNS.filter((t) => t.corridor === corridor);
-            return (
-              <div key={corridor}>
-                <p className="text-[9px] font-black uppercase tracking-widest text-brand-orange mb-2">
-                  {CORRIDOR_LABELS[corridor]}
+        {/* Dark dispatch board panel */}
+        <div className="relative overflow-hidden bg-brand-navy rounded-2xl p-6 sm:p-8 shadow-2xl shadow-brand-navy/20">
+          {/* Dot grid bg */}
+          <div
+            className="absolute inset-0 opacity-[0.045] pointer-events-none"
+            style={{ backgroundImage: 'radial-gradient(circle, #fff 1px, transparent 1px)', backgroundSize: '22px 22px' }}
+          />
+          {/* Glow accents */}
+          <div className="absolute top-0 left-1/4 w-64 h-32 bg-brand-orange/10 blur-3xl pointer-events-none" />
+          <div className="absolute bottom-0 right-1/4 w-64 h-32 bg-brand-green/10 blur-3xl pointer-events-none" />
+
+          <div className="relative z-10">
+            {/* Header */}
+            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+              <div>
+                <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/30 mb-2">
+                  3-Hour Drive Radius · Southern &amp; Central Alberta
                 </p>
-                <div className="flex flex-wrap gap-2">
-                  {towns.map((town) => (
-                    <Link
-                      key={town.slug}
-                      to={`/${town.slug}`}
-                      className="inline-flex items-center gap-1.5 rounded-full border border-brand-navy/10 bg-white px-3 py-1.5 text-[11px] font-bold text-brand-navy hover:border-brand-orange hover:text-brand-orange transition-colors shadow-sm"
-                    >
-                      <span className="h-1 w-1 rounded-full bg-brand-green shrink-0" />
-                      {town.name}
-                      <span className="text-brand-navy/30 font-medium">{driveLabel(town.driveMin)}</span>
-                    </Link>
-                  ))}
-                </div>
+                <h3
+                  className="font-display font-black uppercase tracking-tighter text-white leading-[0.88]"
+                  style={{ fontSize: 'clamp(32px, 5vw, 60px)' }}
+                >
+                  47 Communities.<br />
+                  <span className="text-brand-orange">One Crew.</span>
+                </h3>
               </div>
-            );
-          })}
+              <Link
+                to="/communities"
+                className="shrink-0 inline-flex items-center gap-2 border border-brand-orange text-brand-orange px-5 py-3 text-[11px] font-black uppercase tracking-widest hover:bg-brand-orange hover:text-white transition-all"
+              >
+                Full Directory <ArrowRight size={13} />
+              </Link>
+            </div>
+
+            {/* Corridor rows — top towns only */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-px bg-white/[0.06]">
+              {CORRIDOR_ORDER.map((corridor) => {
+                const towns = TOWNS.filter((t) => t.corridor === corridor).slice(0, 4);
+                const colors: Record<Corridor, string> = {
+                  north: '#6BCB16', south: '#FF6A00', east: '#FFD166',
+                  northeast: '#A8E063', west: '#56CFE1', foothills: '#FF9F1C',
+                };
+                const dirs: Record<Corridor, string> = {
+                  north: 'N', south: 'S', east: 'E',
+                  northeast: 'NE', west: 'W', foothills: 'SW',
+                };
+                const color = colors[corridor];
+                return (
+                  <div key={corridor} className="bg-brand-navy p-4">
+                    <div className="flex items-center gap-2 mb-3">
+                      <div
+                        className="w-6 h-6 flex items-center justify-center font-display font-black text-[10px] shrink-0"
+                        style={{ background: color, color: '#041B4D' }}
+                      >
+                        {dirs[corridor]}
+                      </div>
+                      <span className="text-[9px] font-black uppercase tracking-widest text-white/40">
+                        {CORRIDOR_LABELS[corridor].split('—')[1]?.trim() ?? CORRIDOR_LABELS[corridor]}
+                      </span>
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {towns.map((t) => (
+                        <Link
+                          key={t.slug}
+                          to={`/${t.slug}`}
+                          className="text-[11px] font-black text-white/70 hover:text-white border border-white/[0.08] hover:border-white/20 px-2 py-1 transition-colors"
+                        >
+                          {t.name}
+                        </Link>
+                      ))}
+                      <Link
+                        to="/communities"
+                        className="text-[11px] font-black px-2 py-1 transition-colors"
+                        style={{ color }}
+                      >
+                        +{TOWNS.filter((t) => t.corridor === corridor).length - 4} more →
+                      </Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Bottom strip */}
+            <div className="flex items-center justify-between mt-5 pt-5 border-t border-white/[0.08]">
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30">
+                <MapPin size={11} className="text-brand-orange" />
+                Calgary Base · Same-day when available
+              </div>
+              <Link
+                to="/communities"
+                className="text-[11px] font-black uppercase tracking-widest text-brand-orange hover:text-white transition-colors flex items-center gap-1"
+              >
+                See all 47 <ArrowRight size={11} />
+              </Link>
+            </div>
+          </div>
         </div>
       </motion.div>
 
