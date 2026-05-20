@@ -402,13 +402,21 @@ const Hero = () => {
 
               <div className="w-px h-8 bg-white/15 shrink-0 hidden sm:block" />
 
-              {/* Google rating */}
-              <div className="flex min-h-[70px] items-center rounded-xl border border-white/10 bg-white/[0.045] p-3 sm:min-h-0 sm:border-0 sm:bg-transparent sm:p-0 shrink-0">
-                <div className="flex items-baseline gap-1">
-                  <span className="text-base sm:text-xl font-black text-white leading-none">5.0</span>
-                  <span className="text-[9px] font-black text-brand-orange uppercase tracking-widest">★ Google</span>
+              {/* Google rating — links to leave a review */}
+              <a
+                href="https://g.page/r/CerXP-LQnaV0EAI/review"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-[70px] items-center rounded-xl border border-white/10 bg-white/[0.045] p-3 sm:min-h-0 sm:border-0 sm:bg-transparent sm:p-0 shrink-0 hover:opacity-80 transition-opacity"
+              >
+                <div className="flex flex-col gap-0.5">
+                  <div className="flex items-baseline gap-1">
+                    <span className="text-base sm:text-xl font-black text-white leading-none">5.0</span>
+                    <span className="text-[9px] font-black text-brand-orange uppercase tracking-widest">★ Google</span>
+                  </div>
+                  <span className="text-[8px] font-black text-white/30 uppercase tracking-widest">Leave a review ↗</span>
                 </div>
-              </div>
+              </a>
 
               <div className="w-px h-8 bg-white/15 shrink-0 hidden sm:block" />
 
