@@ -200,6 +200,9 @@ const Hero = () => {
       if (over === wasOver) return;
       wasOver = over;
 
+      // Disable difference blend mode on hero panel so orange ring stays true-colour
+      if (cursorWrapRef.current) cursorWrapRef.current.style.mixBlendMode = over ? 'normal' : 'difference';
+
       const ring = cursorRingRef.current;
       if (ring) {
         ring.style.width        = over ? `${REVEAL_RADIUS * 2}px` : '34px';
@@ -268,7 +271,7 @@ const Hero = () => {
       <div
         ref={cursorWrapRef}
         className="fixed pointer-events-none z-[9999]"
-        style={{ left: -300, top: -300, opacity: 0, transition: 'opacity 0.15s' }}
+        style={{ left: -300, top: -300, opacity: 0, transition: 'opacity 0.15s', mixBlendMode: 'difference' }}
       >
         <div ref={cursorRingRef} style={{
           position: 'absolute', borderRadius: '50%',
