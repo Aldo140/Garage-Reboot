@@ -74,6 +74,8 @@ const Navbar = () => {
             <img
               src={logoImg}
               alt="Garage Reboot Logo"
+              width="400"
+              height="400"
               className="w-full h-full object-contain"
             />
           </div>
@@ -81,7 +83,7 @@ const Navbar = () => {
             <span className="font-display font-black text-2xl tracking-tighter leading-none text-brand-navy">
               GARAGE<span className="text-brand-orange">REBOOT</span>
             </span>
-            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
+            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-500">
               Calgary's Local Choice
             </span>
           </div>
@@ -343,6 +345,8 @@ const Hero = () => {
         <motion.img
           src={heroBeforeImg}
           alt="Calgary Garage Before — Aspen Woods"
+          width="1401"
+          height="934"
           style={{ y: imgY }}
           className="absolute inset-0 w-full h-[115%] object-cover"
           fetchpriority="high"
@@ -357,6 +361,8 @@ const Hero = () => {
           <motion.img
             src={heroAfterImg}
             alt="Calgary Garage After — Aspen Woods"
+            width="1401"
+            height="934"
             style={{ y: imgY }}
             className="absolute inset-0 w-full h-[115%] object-cover"
             loading="lazy"
@@ -455,6 +461,8 @@ const Hero = () => {
                 src={illThumbsUp}
                 alt=""
                 aria-hidden="true"
+                width="400"
+                height="267"
                 initial={{ opacity: 0, scale: 0.9, y: 10 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 transition={{ duration: 0.45, delay: 0.25 }}
@@ -520,7 +528,7 @@ const Hero = () => {
                 <div className="flex -space-x-2 shrink-0">
                   {[1, 2, 3, 4].map((i) => (
                     <div key={i} className="w-7 h-7 sm:w-9 sm:h-9 rounded-full border-2 border-brand-navy overflow-hidden bg-gray-600 shrink-0">
-                      <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="" className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+                      <img src={`https://i.pravatar.cc/100?img=${i + 10}`} alt="" width="100" height="100" className="w-full h-full object-cover" />
                     </div>
                   ))}
                 </div>
@@ -582,11 +590,11 @@ const Hero = () => {
         </p>
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-gray-200 overflow-hidden shrink-0">
-            <img src="https://i.pravatar.cc/100?img=11" alt="Sarah J." className="w-full h-full object-cover" referrerPolicy="no-referrer" />
+            <img src="https://i.pravatar.cc/100?img=11" alt="Sarah J." width="100" height="100" className="w-full h-full object-cover" />
           </div>
           <div>
             <p className="text-brand-navy text-xs font-black uppercase tracking-tight leading-none">Sarah J.</p>
-            <p className="text-gray-400 text-[10px] font-medium mt-0.5">Calgary, AB · Google Review</p>
+            <p className="text-gray-500 text-[10px] font-medium mt-0.5">Calgary, AB · Google Review</p>
           </div>
         </div>
       </motion.div>
@@ -724,7 +732,7 @@ const Services = () => {
               />
 
               <div className="flex items-center justify-between mb-5 relative z-10">
-                <span className="font-display text-[10px] font-black text-white/20 tracking-[0.3em]">{svc.num}</span>
+                <span className="font-display text-[10px] font-black text-white/20 tracking-[0.3em]" aria-hidden="true">{svc.num}</span>
                 <ArrowRight size={13} className="text-white/15 group-hover:text-brand-orange group-hover:translate-x-0.5 transition-all duration-300" />
               </div>
 
@@ -827,7 +835,7 @@ const TruckDivider = () => {
               Dispatching Daily —{' '}
               <span className="text-brand-orange">Calgary &amp; Beyond</span>
             </p>
-            <p className="text-sm text-gray-400 font-medium mt-1">Same-day availability · Southern Alberta</p>
+            <p className="text-sm text-gray-500 font-medium mt-1">Same-day availability · Southern Alberta</p>
           </motion.div>
 
           {/* Stats */}
@@ -844,7 +852,7 @@ const TruckDivider = () => {
             ].map(s => (
               <div key={s.label} className="text-center">
                 <div className="font-display text-xl sm:text-2xl font-black text-brand-navy leading-none">{s.val}</div>
-                <div className="text-[9px] font-black text-gray-400 uppercase tracking-widest mt-0.5">{s.label}</div>
+                <div className="text-[9px] font-black text-gray-500 uppercase tracking-widest mt-0.5">{s.label}</div>
               </div>
             ))}
           </motion.div>
@@ -918,7 +926,7 @@ const Pricing = () => {
             <h2 className="font-display text-5xl sm:text-7xl md:text-[88px] font-black uppercase tracking-tighter leading-none text-brand-navy">
               Fair <span className="text-brand-orange">Pricing</span>
             </h2>
-            <p className="text-base sm:text-lg text-gray-400 font-medium mt-3 max-w-sm">
+            <p className="text-base sm:text-lg text-gray-500 font-medium mt-3 max-w-sm">
               We charge by <span className="font-black text-brand-navy">volume, not hours</span>. Dump fees always included. No surprises.
             </p>
           </div>
@@ -1002,7 +1010,7 @@ const Pricing = () => {
                     <h3 className={`font-display text-2xl font-black uppercase tracking-tight leading-none ${isPopular ? 'text-white' : 'text-brand-navy'}`}>
                       {tier.name}
                     </h3>
-                    <span className={`block mt-1 text-[11px] font-normal leading-snug ${isPopular ? 'text-white/45' : 'text-gray-400'}`}>
+                    <span className={`block mt-1 text-[11px] font-normal leading-snug ${isPopular ? 'text-white/45' : 'text-gray-500'}`}>
                       {tier.desc}
                     </span>
                   </div>
@@ -1081,7 +1089,7 @@ const Pricing = () => {
               <h3 className="font-display text-2xl sm:text-3xl font-black uppercase tracking-tight text-brand-navy">Common Questions</h3>
               <span className="px-2.5 py-1 rounded-full bg-brand-soft text-brand-navy/40 text-[10px] font-black uppercase tracking-widest">{faqs.length} answers</span>
             </div>
-            <img src={qnaImg} alt="" className="hidden sm:block h-24 w-auto object-contain drop-shadow-xl shrink-0" />
+            <img src={qnaImg} alt="" width="500" height="333" className="hidden sm:block h-24 w-auto object-contain drop-shadow-xl shrink-0" />
           </div>
 
           <div className="grid md:grid-cols-2 gap-2">
@@ -1282,6 +1290,8 @@ const ServiceArea = () => {
               <img
                 src={servicesCardImg}
                 alt="Garage Reboot service options overview"
+                width="900"
+                height="600"
                 className="relative z-10 block w-full rounded-xl object-contain"
               />
               <div className="absolute left-4 top-4 z-20 hidden rounded-full bg-brand-orange px-3 py-1.5 text-[9px] font-black uppercase tracking-widest text-white shadow-lg sm:block">
@@ -1550,7 +1560,7 @@ const ContactForm = () => {
               <h2 className="font-display text-5xl md:text-8xl font-black uppercase tracking-tighter leading-none text-brand-navy mb-4">
                 Quote <span className="text-brand-orange">Sent!</span>
               </h2>
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-sm mb-10">
+              <p className="text-gray-500 font-bold uppercase tracking-widest text-sm mb-10">
                 We'll be in touch within 30 minutes.
               </p>
               <button
@@ -1578,7 +1588,7 @@ const ContactForm = () => {
               <h2 className="font-display text-5xl md:text-8xl font-black mb-4 uppercase tracking-tighter leading-none text-brand-navy">
                 Get A <span className="text-brand-orange">Quote</span>
               </h2>
-              <p className="text-gray-400 font-bold uppercase tracking-widest text-sm italic">Response time: ~30 Minutes</p>
+              <p className="text-gray-500 font-bold uppercase tracking-widest text-sm italic">Response time: ~30 Minutes</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-12 max-w-3xl mx-auto">
@@ -1626,7 +1636,7 @@ const ContactForm = () => {
               </div>
 
               {/* Photos note */}
-              <p className="text-sm text-gray-400 font-medium text-center">
+              <p className="text-sm text-gray-500 font-medium text-center">
                 📷 Have garage photos? Text them to us after submitting — we'll reference them in your quote.
               </p>
 
@@ -1774,9 +1784,10 @@ const Gallery = () => {
                 <motion.img
                   src={proj.before}
                   alt={`Before — ${proj.title}`}
+                  width="1401"
+                  height="934"
                   style={{ y: parallaxBefore[i] }}
                   className="absolute inset-0 w-full h-[116%] -top-[8%] object-cover"
-                  referrerPolicy="no-referrer"
                 />
                 {/* Vignette layers */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-black/10 to-transparent" />
@@ -1799,9 +1810,10 @@ const Gallery = () => {
                 <motion.img
                   src={proj.after}
                   alt={`After — ${proj.title}`}
+                  width="1401"
+                  height="934"
                   style={{ y: parallaxAfter[i] }}
                   className="absolute inset-0 w-full h-[116%] -top-[8%] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
-                  referrerPolicy="no-referrer"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-br from-transparent to-brand-green/12" />
@@ -1932,7 +1944,7 @@ const Process = () => {
               >
                 <span className="absolute -right-2 -top-3 font-black text-7xl xl:text-8xl text-brand-navy/[0.04] group-hover:text-brand-orange/10 transition-all leading-none">{p.step}</span>
                 <div className="relative z-10 mb-6 flex h-32 items-end justify-center rounded-xl bg-brand-soft">
-                  <img src={p.ill} alt="" className="h-36 w-auto object-contain drop-shadow-xl" />
+                  <img src={p.ill} alt="" width="500" height="400" className="h-36 w-auto object-contain drop-shadow-xl" />
                 </div>
                 <h3 className="relative z-10 font-black text-2xl xl:text-3xl uppercase tracking-tighter mb-4 text-brand-navy leading-none">{p.title}</h3>
                 <p className="relative z-10 text-gray-500 font-medium leading-relaxed text-base xl:text-lg opacity-80">{p.desc}</p>
@@ -1976,7 +1988,7 @@ const CrewInAction = () => {
           <div className="w-1.5 h-1.5 rounded-full bg-brand-orange" />
           <span className="font-black uppercase text-[10px] tracking-[0.4em] text-white/40">Real Crew · Real Work</span>
         </div>
-        <span className="font-black uppercase text-[10px] tracking-[0.4em] text-white/20 hidden sm:block">Calgary, AB</span>
+        <span className="font-black uppercase text-[10px] tracking-[0.4em] text-white/20 hidden sm:block" aria-hidden="true">Calgary, AB</span>
       </div>
 
       {/* Photo strip — swipe on mobile, grid on sm+ */}
@@ -1999,6 +2011,8 @@ const CrewInAction = () => {
             <img
               src={shot.img}
               alt={shot.label}
+              width="1201"
+              height="801"
               className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.04]"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
@@ -2035,7 +2049,7 @@ const CrewInAction = () => {
 
       {/* Bottom strip */}
       <div className="border-t border-white/8 px-4 sm:px-8 lg:px-20 py-5 flex items-center gap-6 max-w-[1440px] mx-auto">
-        <span className="font-black uppercase text-[10px] tracking-[0.35em] text-white/25">Garage Reboot Team</span>
+        <span className="font-black uppercase text-[10px] tracking-[0.35em] text-white/30">Garage Reboot Team</span>
         <div className="flex-1 h-px bg-white/8" />
         <a href="#contact" className="font-black uppercase text-[10px] tracking-[0.35em] text-brand-orange hover:text-white transition-colors">
           Book Your Job →
@@ -2081,7 +2095,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const t = setTimeout(() => setLoading(false), 1900);
+    const t = setTimeout(() => setLoading(false), 600);
     return () => clearTimeout(t);
   }, []);
 
@@ -2099,6 +2113,8 @@ export default function App() {
         <img
           src={wideLandingImg}
           alt="Clean organized Calgary garage after Garage Reboot transformation"
+          width="1601"
+          height="550"
           className="w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] object-cover block"
           loading="lazy"
         />
@@ -2145,6 +2161,8 @@ export default function App() {
               <img
                 src={reviewsImg}
                 alt=""
+                width="500"
+                height="333"
                 className="mx-auto mb-5 h-36 w-auto object-contain drop-shadow-xl"
                 loading="lazy"
               />
