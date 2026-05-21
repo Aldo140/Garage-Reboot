@@ -566,10 +566,12 @@ const Hero = () => {
 
 const FloatingBoxGroup = () => {
   const groupRef = useRef<Group>(null!);
+  const elapsed = useRef(0);
 
-  useFrame((state) => {
-    groupRef.current.rotation.y = state.clock.elapsedTime * 0.12;
-    groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.55) * 0.18;
+  useFrame((_, delta) => {
+    elapsed.current += delta;
+    groupRef.current.rotation.y = elapsed.current * 0.12;
+    groupRef.current.position.y = Math.sin(elapsed.current * 0.55) * 0.18;
   });
 
   const boxes: { pos: [number,number,number]; scale: [number,number,number]; color: string; rot: [number,number,number] }[] = [

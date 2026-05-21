@@ -7,6 +7,14 @@ import CommunitiesPage from './CommunitiesPage.tsx';
 import { trackPageView } from './analytics.ts';
 import './index.css';
 
+// THREE.Clock was deprecated in three.js r184; @react-three/fiber 9.x still
+// uses it internally. Suppress until R3F migrates to THREE.Timer.
+const _origWarn = console.warn.bind(console);
+console.warn = (...args: unknown[]) => {
+  if (typeof args[0] === 'string' && args[0].startsWith('THREE.Clock:')) return;
+  _origWarn(...args);
+};
+
 function PageTracker() {
   const location = useLocation();
   useEffect(() => {
