@@ -141,12 +141,13 @@
 }
 
 .contact-label {
-  @apply absolute left-2 top-4 text-gray-400 font-bold uppercase tracking-widest pointer-events-none transition-all duration-300;
+  @apply absolute left-2 top-4 text-gray-600 font-bold uppercase tracking-widest pointer-events-none transition-all duration-300;
 }
 
 .contact-input:focus ~ .contact-label,
 .contact-input:not(:placeholder-shown) ~ .contact-label {
-  @apply top-[-1.5rem] text-xs text-brand-orange;
+  @apply top-[-1.5rem] text-xs;
+  color: #B84A09;
 }
 
 .contact-bar {

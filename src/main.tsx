@@ -1,12 +1,12 @@
-import { StrictMode, useEffect } from 'react';
+import { StrictMode, useEffect, lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import App from './App.tsx';
-import TownPage from './TownPage.tsx';
-import CommunitiesPage from './CommunitiesPage.tsx';
 import { trackPageView } from './analytics.ts';
 import './index.css';
 
+const TownPage = lazy(() => import('./TownPage.tsx'));
+const CommunitiesPage = lazy(() => import('./CommunitiesPage.tsx'));
 
 function PageTracker() {
   const location = useLocation();
@@ -22,8 +22,8 @@ createRoot(document.getElementById('root')!).render(
       <PageTracker />
       <Routes>
         <Route path="/" element={<App />} />
-        <Route path="/communities" element={<CommunitiesPage />} />
-        <Route path="/:slug" element={<TownPage />} />
+        <Route path="/communities" element={<Suspense fallback={null}><CommunitiesPage /></Suspense>} />
+        <Route path="/:slug" element={<Suspense fallback={null}><TownPage /></Suspense>} />
       </Routes>
     </BrowserRouter>
   </StrictMode>,
