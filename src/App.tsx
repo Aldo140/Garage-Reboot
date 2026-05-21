@@ -174,45 +174,85 @@ const Hero = () => {
   const contentOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 0.6], ['0%', '-8%']);
 
-  // Cursor state
-  const [cursorPos, setCursorPos] = useState({ x: -300, y: -300 });
-  const [revealPos, setRevealPos] = useState({ x: 0, y: 0 });
-  const [isOverPanel, setIsOverPanel] = useState(false);
-  const [cursorVisible, setCursorVisible] = useState(false);
+  // Refs for direct DOM updates — zero React re-renders on mouse move
+  const cursorWrapRef  = useRef<HTMLDivElement>(null);
+  const cursorRingRef  = useRef<HTMLDivElement>(null);
+  const cursorDotRef   = useRef<HTMLDivElement>(null);
+  const cursorPeekRef  = useRef<HTMLDivElement>(null);
+  const clipDivRef     = useRef<HTMLDivElement>(null);
+  const hoverHintRef   = useRef<HTMLDivElement>(null);
+  const preStateRef    = useRef<HTMLDivElement>(null);
+  const postStateRef   = useRef<HTMLDivElement>(null);
 
-  // Mobile slideshow
+  // Mobile slideshow (timer-driven, low frequency — fine as state)
   const [slideIdx, setSlideIdx] = useState(0);
   useEffect(() => {
     const t = setInterval(() => setSlideIdx(i => (i + 1) % HERO_SLIDES.length), 3600);
     return () => clearInterval(t);
   }, []);
 
-  // Global cursor tracking + body cursor:none + panel reveal detection
   useEffect(() => {
     const prev = document.body.style.cursor;
     document.body.style.cursor = 'none';
     let wasOver = false;
+    let lastX = 0, lastY = 0;
+
+    const setOver = (over: boolean) => {
+      if (over === wasOver) return;
+      wasOver = over;
+
+      const ring = cursorRingRef.current;
+      if (ring) {
+        ring.style.width        = over ? `${REVEAL_RADIUS * 2}px` : '34px';
+        ring.style.height       = over ? `${REVEAL_RADIUS * 2}px` : '34px';
+        ring.style.left         = over ? `-${REVEAL_RADIUS}px`    : '-17px';
+        ring.style.top          = over ? `-${REVEAL_RADIUS}px`    : '-17px';
+        ring.style.borderColor  = over ? 'rgba(255,106,0,0.8)'    : 'rgba(255,255,255,0.55)';
+        ring.style.boxShadow    = over ? '0 0 30px rgba(255,106,0,0.22), inset 0 0 30px rgba(255,106,0,0.06)' : 'none';
+      }
+      if (cursorDotRef.current)  cursorDotRef.current.style.background = over ? '#FF6A00' : '#fff';
+      if (cursorPeekRef.current) cursorPeekRef.current.style.display   = over ? 'block'   : 'none';
+      if (hoverHintRef.current)  hoverHintRef.current.style.opacity    = over ? '0'       : '1';
+      if (preStateRef.current)   preStateRef.current.style.opacity     = over ? '0'       : '1';
+      if (postStateRef.current)  postStateRef.current.style.opacity    = over ? '1'       : '0';
+
+      if (clipDivRef.current) {
+        if (over) {
+          clipDivRef.current.style.transition = 'clip-path 0.12s ease-out';
+        } else {
+          clipDivRef.current.style.transition = 'clip-path 0.38s ease-in';
+          clipDivRef.current.style.clipPath   = `circle(0px at ${lastX}px ${lastY}px)`;
+        }
+      }
+
+      if (over) Analytics.revealHover();
+    };
+
     const onMove = (e: MouseEvent) => {
-      setCursorPos({ x: e.clientX, y: e.clientY });
-      setCursorVisible(true);
+      const wrap = cursorWrapRef.current;
+      if (wrap) {
+        wrap.style.left    = `${e.clientX}px`;
+        wrap.style.top     = `${e.clientY}px`;
+        wrap.style.opacity = '1';
+      }
       if (revealPanelRef.current) {
         const rect = revealPanelRef.current.getBoundingClientRect();
-        const inPanel =
-          e.clientX >= rect.left && e.clientX <= rect.right &&
-          e.clientY >= rect.top  && e.clientY <= rect.bottom;
-        setIsOverPanel(inPanel);
-        if (inPanel) {
-          setRevealPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-          if (!wasOver) Analytics.revealHover();
+        const inPanel = e.clientX >= rect.left && e.clientX <= rect.right &&
+                        e.clientY >= rect.top  && e.clientY <= rect.bottom;
+        setOver(inPanel);
+        if (inPanel && clipDivRef.current) {
+          lastX = e.clientX - rect.left;
+          lastY = e.clientY - rect.top;
+          clipDivRef.current.style.clipPath = `circle(${REVEAL_RADIUS}px at ${lastX}px ${lastY}px)`;
         }
-        wasOver = inPanel;
       }
     };
+
     const onLeave = () => {
-      setCursorVisible(false);
-      setIsOverPanel(false);
-      wasOver = false;
+      if (cursorWrapRef.current) cursorWrapRef.current.style.opacity = '0';
+      setOver(false);
     };
+
     document.addEventListener('mousemove', onMove);
     document.addEventListener('mouseleave', onLeave);
     return () => {
@@ -225,43 +265,30 @@ const Hero = () => {
   return (
     <section ref={heroRef} className="relative bg-brand-navy overflow-hidden">
 
-      {/* ── Global custom cursor ── */}
+      {/* ── Global custom cursor — all updates via DOM refs, no setState ── */}
       <div
+        ref={cursorWrapRef}
         className="fixed pointer-events-none z-[9999]"
-        style={{ left: cursorPos.x, top: cursorPos.y, opacity: cursorVisible ? 1 : 0, transition: 'opacity 0.15s' }}
+        style={{ left: -300, top: -300, opacity: 0, transition: 'opacity 0.15s' }}
       >
-        {/* Expanding ring */}
-        <div style={{
-          position: 'absolute',
-          borderRadius: '50%',
-          border: `2px solid ${isOverPanel ? 'rgba(255,106,0,0.8)' : 'rgba(255,255,255,0.55)'}`,
-          width: isOverPanel ? REVEAL_RADIUS * 2 : 34,
-          height: isOverPanel ? REVEAL_RADIUS * 2 : 34,
-          left: isOverPanel ? -REVEAL_RADIUS : -17,
-          top: isOverPanel ? -REVEAL_RADIUS : -17,
-          boxShadow: isOverPanel ? '0 0 30px rgba(255,106,0,0.22), inset 0 0 30px rgba(255,106,0,0.06)' : 'none',
-          transition: 'width 0.38s cubic-bezier(0.16,1,0.3,1), height 0.38s cubic-bezier(0.16,1,0.3,1), left 0.38s cubic-bezier(0.16,1,0.3,1), top 0.38s cubic-bezier(0.16,1,0.3,1), border-color 0.2s',
+        <div ref={cursorRingRef} style={{
+          position: 'absolute', borderRadius: '50%',
+          border: '2px solid rgba(255,255,255,0.55)',
+          width: 34, height: 34, left: -17, top: -17, boxShadow: 'none',
+          transition: 'width 0.38s cubic-bezier(0.16,1,0.3,1), height 0.38s cubic-bezier(0.16,1,0.3,1), left 0.38s cubic-bezier(0.16,1,0.3,1), top 0.38s cubic-bezier(0.16,1,0.3,1), border-color 0.2s, box-shadow 0.2s',
         }} />
-        {/* Center dot */}
-        <div style={{
-          position: 'absolute',
-          width: 5, height: 5, left: -2.5, top: -2.5,
-          borderRadius: '50%',
-          background: isOverPanel ? '#FF6A00' : '#fff',
-          transition: 'background 0.2s',
+        <div ref={cursorDotRef} style={{
+          position: 'absolute', width: 5, height: 5, left: -2.5, top: -2.5,
+          borderRadius: '50%', background: '#fff', transition: 'background 0.2s',
         }} />
-        {/* PEEK label — only when over panel */}
-        {isOverPanel && (
-          <div style={{
-            position: 'absolute', left: 10, top: -8,
-            fontFamily: 'Oswald, sans-serif', fontWeight: 900,
-            fontSize: 9, letterSpacing: '0.3em',
-            textTransform: 'uppercase', color: '#FF6A00',
-            whiteSpace: 'nowrap',
-          }}>
-            Peek
-          </div>
-        )}
+        <div ref={cursorPeekRef} style={{
+          display: 'none', position: 'absolute', left: 10, top: -8,
+          fontFamily: 'Oswald, sans-serif', fontWeight: 900,
+          fontSize: 9, letterSpacing: '0.3em',
+          textTransform: 'uppercase', color: '#FF6A00', whiteSpace: 'nowrap',
+        }}>
+          Peek
+        </div>
       </div>
 
       {/* ── MOBILE: auto-slideshow ── */}
@@ -317,11 +344,9 @@ const Hero = () => {
 
         {/* After — revealed only inside the cursor circle */}
         <div
+          ref={clipDivRef}
           className="absolute inset-0"
-          style={{
-            clipPath: `circle(${isOverPanel ? REVEAL_RADIUS : 0}px at ${revealPos.x}px ${revealPos.y}px)`,
-            transition: `clip-path ${isOverPanel ? '0.12s ease-out' : '0.38s ease-in'}`,
-          }}
+          style={{ clipPath: 'circle(0px at 0px 0px)', transition: 'clip-path 0.38s ease-in' }}
         >
           <motion.img
             src={heroAfterImg}
@@ -345,8 +370,9 @@ const Hero = () => {
 
         {/* Hover hint — fades out once user hovers */}
         <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-black/40 backdrop-blur-sm border border-white/15 px-4 py-2 rounded-full pointer-events-none transition-opacity duration-500"
-          style={{ opacity: isOverPanel ? 0 : 1 }}
+          ref={hoverHintRef}
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex items-center gap-2 bg-black/40 backdrop-blur-sm border border-white/15 px-4 py-2 rounded-full pointer-events-none"
+          style={{ opacity: 1, transition: 'opacity 0.5s' }}
         >
           <div className="w-1.5 h-1.5 rounded-full bg-brand-orange animate-pulse" />
           <span className="text-white text-[10px] font-black uppercase tracking-[0.28em]">Hover to reveal</span>
@@ -466,11 +492,11 @@ const Hero = () => {
 
             {/* Pre / Post state label — crossfades with cursor hover */}
             <div className="hidden md:block relative h-6 mb-8">
-              <div className="absolute inset-0 flex items-center gap-2.5 transition-opacity duration-300" style={{ opacity: isOverPanel ? 0 : 1 }}>
+              <div ref={preStateRef} className="absolute inset-0 flex items-center gap-2.5" style={{ opacity: 1, transition: 'opacity 0.3s' }}>
                 <div className="w-[3px] h-5 bg-brand-orange rounded-full shrink-0" />
                 <span className="text-brand-orange font-black text-[10px] uppercase tracking-[0.32em]">Pre Garage Reboot</span>
               </div>
-              <div className="absolute inset-0 flex items-center gap-2.5 transition-opacity duration-300" style={{ opacity: isOverPanel ? 1 : 0 }}>
+              <div ref={postStateRef} className="absolute inset-0 flex items-center gap-2.5" style={{ opacity: 0, transition: 'opacity 0.3s' }}>
                 <div className="w-[3px] h-5 bg-brand-green rounded-full shrink-0" />
                 <span className="text-brand-green font-black text-[10px] uppercase tracking-[0.32em]">Post Garage Reboot ✓</span>
               </div>
