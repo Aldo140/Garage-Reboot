@@ -36,4 +36,3 @@ User-agent: Bytespider
 Allow: /
 
 Sitemap: https://garagereboot.vercel.app/sitemap.xml
-LLMs: https://garagereboot.vercel.app/llms.txt

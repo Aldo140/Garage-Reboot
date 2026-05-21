@@ -8,9 +8,6 @@ import { Link } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useTransform, useInView } from 'motion/react';
 import { TOWNS, CORRIDOR_LABELS, driveLabel, type Corridor } from './towns';
 import { Analytics } from './analytics';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Float } from '@react-three/drei';
-import type { Group } from 'three';
 import wideLandingImg from '@/images/hero/wide-banner.webp';
 import logoImg from '@/images/logo.png';
 import heroBeforeImg from '@/images/hero/before.webp';
@@ -125,6 +122,8 @@ const Navbar = () => {
         <button
           className="md:hidden text-brand-navy"
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          aria-label={isMobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={isMobileMenuOpen}
         >
           {isMobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
         </button>
@@ -339,7 +338,7 @@ const Hero = () => {
           alt="Calgary Garage Before — Aspen Woods"
           style={{ y: imgY }}
           className="absolute inset-0 w-full h-[115%] object-cover"
-          referrerPolicy="no-referrer"
+          fetchpriority="high"
         />
 
         {/* After — revealed only inside the cursor circle */}
@@ -353,7 +352,7 @@ const Hero = () => {
             alt="Calgary Garage After — Aspen Woods"
             style={{ y: imgY }}
             className="absolute inset-0 w-full h-[115%] object-cover"
-            referrerPolicy="no-referrer"
+            loading="lazy"
           />
           {/* After badge — also clipped inside the circle */}
           <div className="absolute top-6 left-6 z-10 flex items-center gap-1.5 bg-brand-green/90 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-lg">
@@ -588,51 +587,6 @@ const Hero = () => {
   );
 };
 
-// --- 3D Components ---
-
-const FloatingBoxGroup = () => {
-  const groupRef = useRef<Group>(null!);
-  const elapsed = useRef(0);
-
-  useFrame((_, delta) => {
-    elapsed.current += delta;
-    groupRef.current.rotation.y = elapsed.current * 0.12;
-    groupRef.current.position.y = Math.sin(elapsed.current * 0.55) * 0.18;
-  });
-
-  const boxes: { pos: [number,number,number]; scale: [number,number,number]; color: string; rot: [number,number,number] }[] = [
-    { pos: [0, 0, 0],        scale: [1.3, 1.3, 1.3], color: '#FF6A00', rot: [0.20,  0.40,  0.10] },
-    { pos: [1.9, -0.5, 0.3], scale: [0.9, 0.9, 0.9], color: '#6BCB16', rot: [-0.10, 0.30,  0.20] },
-    { pos: [-1.8, 0.4, -0.4],scale: [1.0, 0.75, 1.0],color: '#232323', rot: [0.15, -0.40,  0.10] },
-    { pos: [0.5, 1.7, -0.3], scale: [0.6, 0.6, 0.6], color: '#FF6A00', rot: [0.30,  0.50, -0.20] },
-    { pos: [-0.7,-1.5, 0.5], scale: [0.7, 0.55, 0.8],color: '#6BCB16', rot: [0.10, -0.30,  0.30] },
-    { pos: [2.2,  1.0, -0.2],scale: [0.5, 0.8, 0.5], color: '#041B4D', rot: [0.40,  0.20, -0.10] },
-  ];
-
-  return (
-    <group ref={groupRef}>
-      {boxes.map((b, i) => (
-        <mesh key={i} position={b.pos} rotation={b.rot} scale={b.scale}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color={b.color} roughness={0.35} metalness={0.18} />
-        </mesh>
-      ))}
-    </group>
-  );
-};
-
-const GarageScene3D = () => (
-  <div className="hidden xl:block absolute -top-8 right-0 w-[400px] h-[340px] pointer-events-none z-0 opacity-30">
-    <Canvas camera={{ position: [0, 0, 7.5], fov: 48 }} gl={{ alpha: true, antialias: true }}>
-      <ambientLight intensity={0.55} />
-      <pointLight position={[4, 4, 5]} intensity={1.8} color="#FF6A00" />
-      <pointLight position={[-3, -2, 2]} intensity={0.7} color="#6BCB16" />
-      <Float speed={1.4} rotationIntensity={0.35} floatIntensity={0.9}>
-        <FloatingBoxGroup />
-      </Float>
-    </Canvas>
-  </div>
-);
 
 const Services = () => {
   const featured = [
@@ -675,8 +629,6 @@ const Services = () => {
   return (
     <section id="services" className="py-20 md:py-32 bg-brand-navy overflow-hidden">
       <div className="relative z-10 max-w-[1440px] mx-auto px-4 sm:px-8 lg:px-20">
-        <GarageScene3D />
-
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -721,6 +673,7 @@ const Services = () => {
                 alt=""
                 className="absolute bottom-0 right-0 h-44 sm:h-56 w-auto object-contain pointer-events-none
                            translate-x-3 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-500 ease-out drop-shadow-2xl"
+                loading="lazy"
               />
 
               {/* Content — max-width keeps it clear of illustration */}
@@ -1625,27 +1578,27 @@ const ContactForm = () => {
               {/* Row 1: Name + Phone */}
               <div className="grid md:grid-cols-2 gap-12">
                 <div className="contact-input-group">
-                  <input required type="text" name="name" value={form.name} onChange={handleChange} className="contact-input" placeholder=" " />
+                  <input required id="name" type="text" name="name" value={form.name} onChange={handleChange} className="contact-input" placeholder=" " />
                   <span className="contact-bar" />
-                  <label className="contact-label">Full Name</label>
+                  <label htmlFor="name" className="contact-label">Full Name</label>
                 </div>
                 <div className="contact-input-group">
-                  <input required type="tel" name="phone" value={form.phone} onChange={handleChange} className="contact-input" placeholder=" " />
+                  <input required id="phone" type="tel" name="phone" value={form.phone} onChange={handleChange} className="contact-input" placeholder=" " />
                   <span className="contact-bar" />
-                  <label className="contact-label">Phone Number</label>
+                  <label htmlFor="phone" className="contact-label">Phone Number</label>
                 </div>
               </div>
 
               {/* Row 2: Email */}
               <div className="contact-input-group">
-                <input required type="email" name="email" value={form.email} onChange={handleChange} className="contact-input" placeholder=" " />
+                <input required id="email" type="email" name="email" value={form.email} onChange={handleChange} className="contact-input" placeholder=" " />
                 <span className="contact-bar" />
-                <label className="contact-label">Email Address</label>
+                <label htmlFor="email" className="contact-label">Email Address</label>
               </div>
 
               {/* Row 3: Service */}
               <div className="contact-input-group">
-                <select required name="service" value={form.service} onChange={handleChange} className="contact-input appearance-none cursor-pointer uppercase tracking-widest">
+                <select required id="service" name="service" value={form.service} onChange={handleChange} className="contact-input appearance-none cursor-pointer uppercase tracking-widest">
                   <option value="" disabled hidden> </option>
                   <option>Full Garage Reboot</option>
                   <option>Junk Removal (Commercial/Res)</option>
@@ -1655,14 +1608,14 @@ const ContactForm = () => {
                   <option>Move-Out Service</option>
                 </select>
                 <span className="contact-bar" />
-                <label className="contact-label">Service Required</label>
+                <label htmlFor="service" className="contact-label">Service Required</label>
               </div>
 
               {/* Row 4: Details */}
               <div className="contact-input-group">
-                <textarea required rows={4} name="details" value={form.details} onChange={handleChange} className="contact-input" placeholder=" " />
+                <textarea required id="details" rows={4} name="details" value={form.details} onChange={handleChange} className="contact-input" placeholder=" " />
                 <span className="contact-bar" />
-                <label className="contact-label">Details & Location</label>
+                <label htmlFor="details" className="contact-label">Details & Location</label>
               </div>
 
               {/* Photos note */}
@@ -1715,10 +1668,11 @@ const Footer = () => {
     <div className="border-l-4 border-brand-orange md:border-l md:border-white/20 pl-6 md:pl-8">
       <p className="text-brand-orange font-black text-[10px] uppercase tracking-[0.2em] mb-2">Connect</p>
       <div className="flex gap-4 items-center">
-        <a 
-          href="https://www.facebook.com/profile.php?id=61589686545956" 
-          target="_blank" 
+        <a
+          href="https://www.facebook.com/profile.php?id=61589686545956"
+          target="_blank"
           rel="noopener noreferrer"
+          aria-label="Follow us on Facebook"
           className="hover:text-brand-orange transition-colors"
         >
           <svg className="w-8 h-8 fill-current" viewBox="0 0 24 24">
@@ -2124,6 +2078,7 @@ export default function App() {
     <div className="min-h-screen bg-white">
       <AnimatePresence>{loading && <SplashScreen />}</AnimatePresence>
       <Navbar />
+      <main>
       <Hero />
 
       {/* Wide-landing image — flows directly out of the hero */}
@@ -2134,6 +2089,7 @@ export default function App() {
           src={wideLandingImg}
           alt="Clean organized Calgary garage after Garage Reboot transformation"
           className="w-full h-[40vh] sm:h-[50vh] lg:h-[60vh] object-cover block"
+          loading="lazy"
         />
         {/* Bottom fade into the navy marquee */}
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-brand-navy to-transparent z-10 pointer-events-none" />
@@ -2179,6 +2135,7 @@ export default function App() {
                 src={reviewsImg}
                 alt=""
                 className="mx-auto mb-5 h-36 w-auto object-contain drop-shadow-xl"
+                loading="lazy"
               />
               <div className="text-brand-orange font-black uppercase text-[10px] tracking-[0.4em] mb-4">Real People · Real Results</div>
               <h2 className="font-display text-5xl md:text-8xl xl:text-[100px] font-extrabold mb-4 uppercase tracking-tighter leading-none text-brand-navy">
@@ -2216,6 +2173,7 @@ export default function App() {
       </section>
 
       <ContactForm />
+      </main>
       <Footer />
     </div>
   );
