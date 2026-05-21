@@ -10,7 +10,7 @@ import { TOWNS, CORRIDOR_LABELS, driveLabel, type Corridor } from './towns';
 import { Analytics } from './analytics';
 import wideLandingImg from '@/images/hero/wide-banner.webp';
 import logoImg from '@/images/logo.png';
-import heroBeforeImg from '@/images/hero/before.webp';
+const heroBeforeImg = '/images/hero/before.webp';
 import heroAfterImg from '@/images/hero/after.webp';
 import extra1Img from '@/images/hero/slide-1.webp';
 import extra2Img from '@/images/hero/slide-2.webp';

@@ -29,6 +29,9 @@
     <!-- Canonical -->
     <link rel="canonical" href="https://garagereboot.vercel.app/" />
 
+    <!-- LCP hero image: preload before JS executes so it's in cache when React renders -->
+    <link rel="preload" as="image" href="/images/hero/before.webp" type="image/webp" />
+
     <!-- Performance: preconnect + non-render-blocking font load -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
